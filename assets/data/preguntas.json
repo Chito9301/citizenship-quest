@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "q001",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "What is the supreme law of the land?",
+      "question_es": "¿Cuál es la ley suprema del país?",
+      "options": [
+        { "text_en": "The Constitution", "text_es": "La Constitución" },
+        { "text_en": "The Declaration of Independence", "text_es": "La Declaración de Independencia" },
+        { "text_en": "The Bill of Rights", "text_es": "La Carta de Derechos" },
+        { "text_en": "The Federalist Papers", "text_es": "Los Documentos Federalistas" }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Constitution is the supreme law of the land.",
+      "explanation_es": "La Constitución es la ley suprema del país."
+    },
+    {
+      "id": "q002",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "What does the Constitution do?",
+      "question_es": "¿Qué hace la Constitución?",
+      "options": [
+        { "text_en": "Sets up the government", "text_es": "Establece el gobierno" },
+        { "text_en": "Defines state borders", "text_es": "Define los límites estatales" },
+        { "text_en": "Creates political parties", "text_es": "Crea los partidos políticos" },
+        { "text_en": "Names the national anthem", "text_es": "Nombra el himno nacional" }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Constitution sets up the government, defines the government, and protects basic rights of Americans.",
+      "explanation_es": "La Constitución establece el gobierno, lo define y protege los derechos básicos de los estadounidenses."
+    },
+    {
+      "id": "q003",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "What is one reason colonists came to America?",
+      "question_es": "¿Cuál es una razón por la que los colonos vinieron a América?",
+      "options": [
+        { "text_en": "Freedom", "text_es": "Libertad" },
+        { "text_en": "To join the Spanish army", "text_es": "Para unirse al ejército español" },
+        { "text_en": "To find gold for the Aztecs", "text_es": "Para buscar oro para los aztecas" },
+        { "text_en": "To pay British taxes", "text_es": "Para pagar impuestos británicos" }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Colonists came to America for freedom, political liberty, religious freedom, economic opportunity, or to escape persecution.",
+      "explanation_es": "Los colonos vinieron a América por libertad, libertad política, libertad religiosa, oportunidad económica o para escapar de la persecución."
+    },
+    {
+      "id": "q004",
+      "category": "civics_rights",
+      "difficulty": "easy",
+      "question_en": "What is one right or freedom from the First Amendment?",
+      "question_es": "¿Cuál es un derecho o libertad de la Primera Enmienda?",
+      "options": [
+        { "text_en": "Speech", "text_es": "Expresión" },
+        { "text_en": "Bear arms", "text_es": "Portar armas" },
+        { "text_en": "Vote", "text_es": "Votar" },
+        { "text_en": "Trial by jury", "text_es": "Juicio por jurado" }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The First Amendment protects speech, religion, assembly, press, and petitioning the government.",
+      "explanation_es": "La Primera Enmienda protege la expresión, la religión, la reunión, la prensa y la petición al gobierno."
+    },
+    {
+      "id": "q005",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "How many amendments does the Constitution have?",
+      "question_es": "¿Cuántas enmiendas tiene la Constitución?",
+      "options": [
+        { "text_en": "27", "text_es": "27" },
+        { "text_en": "10", "text_es": "10" },
+        { "text_en": "13", "text_es": "13" },
+        { "text_en": "50", "text_es": "50" }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Constitution has 27 amendments.",
+      "explanation_es": "La Constitución tiene 27 enmiendas."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "@@locale": "es",
+  "appTitle": "Citizenship Quest",
+  "@appTitle": {"description": "Título de la app mostrado en la barra superior y el lanzador del SO"},
+
+  "navQuiz": "Quiz",
+  "navProfile": "Perfil",
+  "navRanking": "Ranking",
+  "navSettings": "Ajustes",
+
+  "quizTitle": "Quiz de Ciudadanía",
+  "startQuiz": "Comenzar Quiz",
+  "questionOf": "Pregunta {current} de {total}",
+  "@questionOf": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "nextQuestion": "Siguiente",
+  "finishQuiz": "Finalizar",
+  "skipQuestion": "Saltar",
+  "fiftyFifty": "50/50",
+  "correctAnswer": "¡Correcto!",
+  "incorrectAnswer": "Incorrecto",
+  "explanationLabel": "¿Por qué?",
+
+  "resultTitle": "Resultados del Quiz",
+  "yourScore": "Tu puntaje",
+  "correctCount": "{correct} de {total} correctas",
+  "@correctCount": {
+    "placeholders": {
+      "correct": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "playAgain": "Jugar de nuevo",
+  "goHome": "Ir al inicio",
+
+  "profileTitle": "Perfil",
+  "totalScore": "Puntaje total",
+  "quizzesPlayed": "Quizzes jugados",
+  "accuracyLabel": "Precisión",
+  "currentStreak": "Racha actual",
+  "badgesLabel": "Insignias",
+  "noBadgesYet": "Aún no hay insignias. ¡Sigue jugando!",
+
+  "rankingTitle": "Ranking",
+  "rankingLoading": "Cargando ranking...",
+
+  "settingsTitle": "Ajustes",
+  "languageLabel": "Idioma",
+  "englishOption": "English",
+  "spanishOption": "Español",
+  "syncNow": "Sincronizar ahora",
+  "syncSuccess": "Sincronización completa",
+
+  "loadingLabel": "Cargando...",
+  "errorLabel": "Algo salió mal",
+  "retryLabel": "Reintentar"
+}
