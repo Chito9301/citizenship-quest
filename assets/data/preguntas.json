@@ -8,10 +8,22 @@
       "question_en": "What is the supreme law of the land?",
       "question_es": "¿Cuál es la ley suprema del país?",
       "options": [
-        { "text_en": "The Constitution", "text_es": "La Constitución" },
-        { "text_en": "The Declaration of Independence", "text_es": "La Declaración de Independencia" },
-        { "text_en": "The Bill of Rights", "text_es": "La Carta de Derechos" },
-        { "text_en": "The Federalist Papers", "text_es": "Los Documentos Federalistas" }
+        {
+          "text_en": "The Constitution",
+          "text_es": "La Constitución"
+        },
+        {
+          "text_en": "The Declaration of Independence",
+          "text_es": "La Declaración de Independencia"
+        },
+        {
+          "text_en": "The Bill of Rights",
+          "text_es": "La Carta de Derechos"
+        },
+        {
+          "text_en": "The Federalist Papers",
+          "text_es": "Los Documentos Federalistas"
+        }
       ],
       "correct_index": 0,
       "explanation_en": "The Constitution is the supreme law of the land.",
@@ -24,10 +36,22 @@
       "question_en": "What does the Constitution do?",
       "question_es": "¿Qué hace la Constitución?",
       "options": [
-        { "text_en": "Sets up the government", "text_es": "Establece el gobierno" },
-        { "text_en": "Defines state borders", "text_es": "Define los límites estatales" },
-        { "text_en": "Creates political parties", "text_es": "Crea los partidos políticos" },
-        { "text_en": "Names the national anthem", "text_es": "Nombra el himno nacional" }
+        {
+          "text_en": "Sets up the government",
+          "text_es": "Establece el gobierno"
+        },
+        {
+          "text_en": "Defines state borders",
+          "text_es": "Define los límites estatales"
+        },
+        {
+          "text_en": "Creates political parties",
+          "text_es": "Crea los partidos políticos"
+        },
+        {
+          "text_en": "Names the national anthem",
+          "text_es": "Nombra el himno nacional"
+        }
       ],
       "correct_index": 0,
       "explanation_en": "The Constitution sets up the government, defines the government, and protects basic rights of Americans.",
@@ -40,10 +64,22 @@
       "question_en": "What is one reason colonists came to America?",
       "question_es": "¿Cuál es una razón por la que los colonos vinieron a América?",
       "options": [
-        { "text_en": "Freedom", "text_es": "Libertad" },
-        { "text_en": "To join the Spanish army", "text_es": "Para unirse al ejército español" },
-        { "text_en": "To find gold for the Aztecs", "text_es": "Para buscar oro para los aztecas" },
-        { "text_en": "To pay British taxes", "text_es": "Para pagar impuestos británicos" }
+        {
+          "text_en": "Freedom",
+          "text_es": "Libertad"
+        },
+        {
+          "text_en": "To join the Spanish army",
+          "text_es": "Para unirse al ejército español"
+        },
+        {
+          "text_en": "To find gold for the Aztecs",
+          "text_es": "Para buscar oro para los aztecas"
+        },
+        {
+          "text_en": "To pay British taxes",
+          "text_es": "Para pagar impuestos británicos"
+        }
       ],
       "correct_index": 0,
       "explanation_en": "Colonists came to America for freedom, political liberty, religious freedom, economic opportunity, or to escape persecution.",
@@ -56,10 +92,22 @@
       "question_en": "What is one right or freedom from the First Amendment?",
       "question_es": "¿Cuál es un derecho o libertad de la Primera Enmienda?",
       "options": [
-        { "text_en": "Speech", "text_es": "Expresión" },
-        { "text_en": "Bear arms", "text_es": "Portar armas" },
-        { "text_en": "Vote", "text_es": "Votar" },
-        { "text_en": "Trial by jury", "text_es": "Juicio por jurado" }
+        {
+          "text_en": "Speech",
+          "text_es": "Expresión"
+        },
+        {
+          "text_en": "Bear arms",
+          "text_es": "Portar armas"
+        },
+        {
+          "text_en": "Vote",
+          "text_es": "Votar"
+        },
+        {
+          "text_en": "Trial by jury",
+          "text_es": "Juicio por jurado"
+        }
       ],
       "correct_index": 0,
       "explanation_en": "The First Amendment protects speech, religion, assembly, press, and petitioning the government.",
@@ -72,14 +120,642 @@
       "question_en": "How many amendments does the Constitution have?",
       "question_es": "¿Cuántas enmiendas tiene la Constitución?",
       "options": [
-        { "text_en": "27", "text_es": "27" },
-        { "text_en": "10", "text_es": "10" },
-        { "text_en": "13", "text_es": "13" },
-        { "text_en": "50", "text_es": "50" }
+        {
+          "text_en": "27",
+          "text_es": "27"
+        },
+        {
+          "text_en": "10",
+          "text_es": "10"
+        },
+        {
+          "text_en": "13",
+          "text_es": "13"
+        },
+        {
+          "text_en": "50",
+          "text_es": "50"
+        }
       ],
       "correct_index": 0,
       "explanation_en": "The Constitution has 27 amendments.",
       "explanation_es": "La Constitución tiene 27 enmiendas."
+    },
+    {
+      "id": "q006",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "Name one branch or part of the government.",
+      "question_es": "Nombra una rama o parte del gobierno.",
+      "options": [
+        {
+          "text_en": "Congress",
+          "text_es": "El Congreso"
+        },
+        {
+          "text_en": "The United Nations",
+          "text_es": "Las Naciones Unidas"
+        },
+        {
+          "text_en": "The city council",
+          "text_es": "El consejo municipal"
+        },
+        {
+          "text_en": "The World Bank",
+          "text_es": "El Banco Mundial"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The three branches are Congress (legislative), the President (executive), and the courts (judicial).",
+      "explanation_es": "Las tres ramas son el Congreso (legislativa), el presidente (ejecutiva) y los tribunales (judicial)."
+    },
+    {
+      "id": "q007",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What stops one branch of government from becoming too powerful?",
+      "question_es": "¿Qué evita que una rama del gobierno se vuelva demasiado poderosa?",
+      "options": [
+        {
+          "text_en": "Checks and balances",
+          "text_es": "Los frenos y contrapesos"
+        },
+        {
+          "text_en": "The stock market",
+          "text_es": "El mercado de valores"
+        },
+        {
+          "text_en": "Public opinion polls",
+          "text_es": "Las encuestas de opinión pública"
+        },
+        {
+          "text_en": "The military",
+          "text_es": "Las fuerzas armadas"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Checks and balances (also called separation of powers) keep each branch from becoming too powerful.",
+      "explanation_es": "Los frenos y contrapesos (o separación de poderes) evitan que una rama se vuelva demasiado poderosa."
+    },
+    {
+      "id": "q008",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "Who is in charge of the executive branch?",
+      "question_es": "¿Quién dirige la rama ejecutiva?",
+      "options": [
+        {
+          "text_en": "The President",
+          "text_es": "El presidente"
+        },
+        {
+          "text_en": "The Chief Justice",
+          "text_es": "El presidente de la Corte Suprema"
+        },
+        {
+          "text_en": "The Speaker of the House",
+          "text_es": "El presidente de la Cámara"
+        },
+        {
+          "text_en": "The Senate Majority Leader",
+          "text_es": "El líder de la mayoría del Senado"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The President is in charge of the executive branch.",
+      "explanation_es": "El presidente dirige la rama ejecutiva."
+    },
+    {
+      "id": "q009",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "Who makes federal laws?",
+      "question_es": "¿Quién hace las leyes federales?",
+      "options": [
+        {
+          "text_en": "Congress",
+          "text_es": "El Congreso"
+        },
+        {
+          "text_en": "The Supreme Court",
+          "text_es": "La Corte Suprema"
+        },
+        {
+          "text_en": "The President alone",
+          "text_es": "Solo el presidente"
+        },
+        {
+          "text_en": "State governors",
+          "text_es": "Los gobernadores estatales"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Congress makes federal laws.",
+      "explanation_es": "El Congreso hace las leyes federales."
+    },
+    {
+      "id": "q010",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What are the two parts of the U.S. Congress?",
+      "question_es": "¿Cuáles son las dos partes del Congreso de EE. UU.?",
+      "options": [
+        {
+          "text_en": "The Senate and the House of Representatives",
+          "text_es": "El Senado y la Cámara de Representantes"
+        },
+        {
+          "text_en": "The Cabinet and the Judiciary",
+          "text_es": "El Gabinete y el Poder Judicial"
+        },
+        {
+          "text_en": "The House and the Supreme Court",
+          "text_es": "La Cámara y la Corte Suprema"
+        },
+        {
+          "text_en": "The Senate and the Electoral College",
+          "text_es": "El Senado y el Colegio Electoral"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Congress is made up of the Senate and the House of Representatives.",
+      "explanation_es": "El Congreso está formado por el Senado y la Cámara de Representantes."
+    },
+    {
+      "id": "q011",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "How many U.S. Senators are there?",
+      "question_es": "¿Cuántos senadores de EE. UU. hay?",
+      "options": [
+        {
+          "text_en": "100",
+          "text_es": "100"
+        },
+        {
+          "text_en": "50",
+          "text_es": "50"
+        },
+        {
+          "text_en": "435",
+          "text_es": "435"
+        },
+        {
+          "text_en": "9",
+          "text_es": "9"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "There are 100 U.S. Senators, two from each state.",
+      "explanation_es": "Hay 100 senadores, dos por cada estado."
+    },
+    {
+      "id": "q012",
+      "category": "american_government",
+      "difficulty": "easy",
+      "question_en": "We elect a President for how many years?",
+      "question_es": "¿Por cuántos años elegimos a un presidente?",
+      "options": [
+        {
+          "text_en": "4",
+          "text_es": "4"
+        },
+        {
+          "text_en": "6",
+          "text_es": "6"
+        },
+        {
+          "text_en": "2",
+          "text_es": "2"
+        },
+        {
+          "text_en": "8",
+          "text_es": "8"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The President is elected for a 4-year term.",
+      "explanation_es": "El presidente es elegido por un período de 4 años."
+    },
+    {
+      "id": "q013",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What is an amendment?",
+      "question_es": "¿Qué es una enmienda?",
+      "options": [
+        {
+          "text_en": "A change to the Constitution",
+          "text_es": "Un cambio a la Constitución"
+        },
+        {
+          "text_en": "A new federal agency",
+          "text_es": "Una nueva agencia federal"
+        },
+        {
+          "text_en": "A presidential veto",
+          "text_es": "Un veto presidencial"
+        },
+        {
+          "text_en": "A state law",
+          "text_es": "Una ley estatal"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "An amendment is a change or addition to the Constitution.",
+      "explanation_es": "Una enmienda es un cambio o adición a la Constitución."
+    },
+    {
+      "id": "q014",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What do we call the first ten amendments to the Constitution?",
+      "question_es": "¿Cómo llamamos a las primeras diez enmiendas de la Constitución?",
+      "options": [
+        {
+          "text_en": "The Bill of Rights",
+          "text_es": "La Carta de Derechos"
+        },
+        {
+          "text_en": "The Federalist Papers",
+          "text_es": "Los Documentos Federalistas"
+        },
+        {
+          "text_en": "The Articles of Confederation",
+          "text_es": "Los Artículos de la Confederación"
+        },
+        {
+          "text_en": "The Preamble",
+          "text_es": "El Preámbulo"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The first ten amendments are called the Bill of Rights.",
+      "explanation_es": "Las primeras diez enmiendas se llaman la Carta de Derechos."
+    },
+    {
+      "id": "q015",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What is one power of the federal government?",
+      "question_es": "¿Cuál es un poder del gobierno federal?",
+      "options": [
+        {
+          "text_en": "To print money",
+          "text_es": "Imprimir dinero"
+        },
+        {
+          "text_en": "To issue driver's licenses",
+          "text_es": "Emitir licencias de conducir"
+        },
+        {
+          "text_en": "To approve local zoning",
+          "text_es": "Aprobar la zonificación local"
+        },
+        {
+          "text_en": "To run public schools",
+          "text_es": "Administrar las escuelas públicas"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The federal government can print money, declare war, create an army, and make treaties.",
+      "explanation_es": "El gobierno federal puede imprimir dinero, declarar la guerra, crear un ejército y firmar tratados."
+    },
+    {
+      "id": "q016",
+      "category": "american_government",
+      "difficulty": "medium",
+      "question_en": "What is one power of the states?",
+      "question_es": "¿Cuál es un poder de los estados?",
+      "options": [
+        {
+          "text_en": "Provide schooling and education",
+          "text_es": "Brindar educación escolar"
+        },
+        {
+          "text_en": "Declare war",
+          "text_es": "Declarar la guerra"
+        },
+        {
+          "text_en": "Print money",
+          "text_es": "Imprimir dinero"
+        },
+        {
+          "text_en": "Make treaties with other countries",
+          "text_es": "Firmar tratados con otros países"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "States provide schooling, police and fire protection, driver's licenses, and approve zoning.",
+      "explanation_es": "Los estados brindan educación, protección policial y de bomberos, licencias de conducir y aprueban la zonificación."
+    },
+    {
+      "id": "q017",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "Who wrote the Declaration of Independence?",
+      "question_es": "¿Quién escribió la Declaración de Independencia?",
+      "options": [
+        {
+          "text_en": "Thomas Jefferson",
+          "text_es": "Thomas Jefferson"
+        },
+        {
+          "text_en": "George Washington",
+          "text_es": "George Washington"
+        },
+        {
+          "text_en": "Benjamin Franklin",
+          "text_es": "Benjamin Franklin"
+        },
+        {
+          "text_en": "John Adams",
+          "text_es": "John Adams"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Thomas Jefferson wrote the Declaration of Independence.",
+      "explanation_es": "Thomas Jefferson escribió la Declaración de Independencia."
+    },
+    {
+      "id": "q018",
+      "category": "american_history",
+      "difficulty": "easy",
+      "question_en": "When was the Declaration of Independence adopted?",
+      "question_es": "¿Cuándo se adoptó la Declaración de Independencia?",
+      "options": [
+        {
+          "text_en": "July 4, 1776",
+          "text_es": "4 de julio de 1776"
+        },
+        {
+          "text_en": "September 17, 1787",
+          "text_es": "17 de septiembre de 1787"
+        },
+        {
+          "text_en": "December 15, 1791",
+          "text_es": "15 de diciembre de 1791"
+        },
+        {
+          "text_en": "July 4, 1789",
+          "text_es": "4 de julio de 1789"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Declaration of Independence was adopted on July 4, 1776.",
+      "explanation_es": "La Declaración de Independencia se adoptó el 4 de julio de 1776."
+    },
+    {
+      "id": "q019",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "How many states were there when the United States first became a country?",
+      "question_es": "¿Cuántos estados había cuando Estados Unidos se convirtió en un país?",
+      "options": [
+        {
+          "text_en": "13",
+          "text_es": "13"
+        },
+        {
+          "text_en": "50",
+          "text_es": "50"
+        },
+        {
+          "text_en": "26",
+          "text_es": "26"
+        },
+        {
+          "text_en": "9",
+          "text_es": "9"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "There were 13 original states.",
+      "explanation_es": "Había 13 estados originales."
+    },
+    {
+      "id": "q020",
+      "category": "american_history",
+      "difficulty": "easy",
+      "question_en": "Who was the first President?",
+      "question_es": "¿Quién fue el primer presidente?",
+      "options": [
+        {
+          "text_en": "George Washington",
+          "text_es": "George Washington"
+        },
+        {
+          "text_en": "Thomas Jefferson",
+          "text_es": "Thomas Jefferson"
+        },
+        {
+          "text_en": "John Adams",
+          "text_es": "John Adams"
+        },
+        {
+          "text_en": "James Madison",
+          "text_es": "James Madison"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "George Washington was the first President of the United States.",
+      "explanation_es": "George Washington fue el primer presidente de Estados Unidos."
+    },
+    {
+      "id": "q021",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "What territory did the United States buy from France in 1803?",
+      "question_es": "¿Qué territorio compró Estados Unidos a Francia en 1803?",
+      "options": [
+        {
+          "text_en": "The Louisiana Territory",
+          "text_es": "El territorio de Luisiana"
+        },
+        {
+          "text_en": "Florida",
+          "text_es": "Florida"
+        },
+        {
+          "text_en": "Alaska",
+          "text_es": "Alaska"
+        },
+        {
+          "text_en": "Texas",
+          "text_es": "Texas"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The United States bought the Louisiana Territory from France in 1803.",
+      "explanation_es": "Estados Unidos compró el territorio de Luisiana a Francia en 1803."
+    },
+    {
+      "id": "q022",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "What did the Emancipation Proclamation do?",
+      "question_es": "¿Qué hizo la Proclamación de Emancipación?",
+      "options": [
+        {
+          "text_en": "Freed the slaves",
+          "text_es": "Liberó a los esclavos"
+        },
+        {
+          "text_en": "Ended World War I",
+          "text_es": "Terminó la Primera Guerra Mundial"
+        },
+        {
+          "text_en": "Created the national bank",
+          "text_es": "Creó el banco nacional"
+        },
+        {
+          "text_en": "Gave women the right to vote",
+          "text_es": "Dio a las mujeres el derecho al voto"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Emancipation Proclamation freed the slaves in the Confederacy.",
+      "explanation_es": "La Proclamación de Emancipación liberó a los esclavos de la Confederación."
+    },
+    {
+      "id": "q023",
+      "category": "american_history",
+      "difficulty": "medium",
+      "question_en": "Name one leader of the women's rights movement in the 1800s.",
+      "question_es": "Nombra a una líder del movimiento por los derechos de la mujer en el siglo XIX.",
+      "options": [
+        {
+          "text_en": "Susan B. Anthony",
+          "text_es": "Susan B. Anthony"
+        },
+        {
+          "text_en": "Eleanor Roosevelt",
+          "text_es": "Eleanor Roosevelt"
+        },
+        {
+          "text_en": "Rosa Parks",
+          "text_es": "Rosa Parks"
+        },
+        {
+          "text_en": "Harriet Beecher Stowe",
+          "text_es": "Harriet Beecher Stowe"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Susan B. Anthony was a leader of the women's rights movement in the 1800s.",
+      "explanation_es": "Susan B. Anthony fue una líder del movimiento por los derechos de la mujer en el siglo XIX."
+    },
+    {
+      "id": "q024",
+      "category": "civics_integrated",
+      "difficulty": "easy",
+      "question_en": "What is the capital of the United States?",
+      "question_es": "¿Cuál es la capital de Estados Unidos?",
+      "options": [
+        {
+          "text_en": "Washington, D.C.",
+          "text_es": "Washington, D.C."
+        },
+        {
+          "text_en": "New York City",
+          "text_es": "Nueva York"
+        },
+        {
+          "text_en": "Los Angeles",
+          "text_es": "Los Ángeles"
+        },
+        {
+          "text_en": "Philadelphia",
+          "text_es": "Filadelfia"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "Washington, D.C. is the capital of the United States.",
+      "explanation_es": "Washington, D.C. es la capital de Estados Unidos."
+    },
+    {
+      "id": "q025",
+      "category": "civics_integrated",
+      "difficulty": "easy",
+      "question_en": "Where is the Statue of Liberty?",
+      "question_es": "¿Dónde está la Estatua de la Libertad?",
+      "options": [
+        {
+          "text_en": "New York Harbor",
+          "text_es": "El puerto de Nueva York"
+        },
+        {
+          "text_en": "Boston Harbor",
+          "text_es": "El puerto de Boston"
+        },
+        {
+          "text_en": "San Francisco Bay",
+          "text_es": "La bahía de San Francisco"
+        },
+        {
+          "text_en": "Chesapeake Bay",
+          "text_es": "La bahía de Chesapeake"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The Statue of Liberty is in New York Harbor, on Liberty Island.",
+      "explanation_es": "La Estatua de la Libertad está en el puerto de Nueva York, en la isla de la Libertad."
+    },
+    {
+      "id": "q026",
+      "category": "civics_integrated",
+      "difficulty": "easy",
+      "question_en": "Why does the flag have 13 stripes?",
+      "question_es": "¿Por qué la bandera tiene 13 franjas?",
+      "options": [
+        {
+          "text_en": "Because there were 13 original colonies",
+          "text_es": "Porque hubo 13 colonias originales"
+        },
+        {
+          "text_en": "Because there are 13 branches of government",
+          "text_es": "Porque hay 13 ramas del gobierno"
+        },
+        {
+          "text_en": "Because 13 is a lucky number",
+          "text_es": "Porque el 13 es un número de la suerte"
+        },
+        {
+          "text_en": "Because the first flag had 13 stars",
+          "text_es": "Porque la primera bandera tenía 13 estrellas"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The flag has 13 stripes because there were 13 original colonies.",
+      "explanation_es": "La bandera tiene 13 franjas porque hubo 13 colonias originales."
+    },
+    {
+      "id": "q027",
+      "category": "civics_integrated",
+      "difficulty": "easy",
+      "question_en": "What is the name of the national anthem?",
+      "question_es": "¿Cuál es el nombre del himno nacional?",
+      "options": [
+        {
+          "text_en": "The Star-Spangled Banner",
+          "text_es": "The Star-Spangled Banner"
+        },
+        {
+          "text_en": "America the Beautiful",
+          "text_es": "America the Beautiful"
+        },
+        {
+          "text_en": "God Bless America",
+          "text_es": "God Bless America"
+        },
+        {
+          "text_en": "My Country 'Tis of Thee",
+          "text_es": "My Country 'Tis of Thee"
+        }
+      ],
+      "correct_index": 0,
+      "explanation_en": "The national anthem is The Star-Spangled Banner.",
+      "explanation_es": "El himno nacional es The Star-Spangled Banner."
     }
   ]
 }

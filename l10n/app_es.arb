@@ -1,20 +1,24 @@
 {
   "@@locale": "es",
   "appTitle": "Citizenship Quest",
-  "@appTitle": {"description": "Título de la app mostrado en la barra superior y el lanzador del SO"},
-
+  "@appTitle": {
+    "description": "Título de la app mostrado en la barra superior y el lanzador del SO"
+  },
   "navQuiz": "Quiz",
   "navProfile": "Perfil",
   "navRanking": "Ranking",
   "navSettings": "Ajustes",
-
   "quizTitle": "Quiz de Ciudadanía",
   "startQuiz": "Comenzar Quiz",
   "questionOf": "Pregunta {current} de {total}",
   "@questionOf": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "nextQuestion": "Siguiente",
@@ -24,19 +28,25 @@
   "correctAnswer": "¡Correcto!",
   "incorrectAnswer": "Incorrecto",
   "explanationLabel": "¿Por qué?",
-
   "resultTitle": "Resultados del Quiz",
   "yourScore": "Tu puntaje",
+  "avgTimePerQuestion": "Tiempo prom. / pregunta",
+  "motivationExcellent": "¡Excelente! Ya estás listo para el examen real.",
+  "motivationGood": "¡Buen trabajo! Un poco más de práctica y lo dominarás.",
+  "motivationKeepPracticing": "Sigue practicando — estás progresando de verdad.",
   "correctCount": "{correct} de {total} correctas",
   "@correctCount": {
     "placeholders": {
-      "correct": {"type": "int"},
-      "total": {"type": "int"}
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "playAgain": "Jugar de nuevo",
   "goHome": "Ir al inicio",
-
   "profileTitle": "Perfil",
   "totalScore": "Puntaje total",
   "quizzesPlayed": "Quizzes jugados",
@@ -44,18 +54,111 @@
   "currentStreak": "Racha actual",
   "badgesLabel": "Insignias",
   "noBadgesYet": "Aún no hay insignias. ¡Sigue jugando!",
-
   "rankingTitle": "Ranking",
   "rankingLoading": "Cargando ranking...",
-
   "settingsTitle": "Ajustes",
   "languageLabel": "Idioma",
   "englishOption": "English",
   "spanishOption": "Español",
   "syncNow": "Sincronizar ahora",
   "syncSuccess": "Sincronización completa",
-
+  "syncNoConnection": "No hay conexión a Internet",
+  "syncNoPendingData": "No hay datos pendientes",
+  "syncFailed": "Falló la sincronización, se reintentará luego",
   "loadingLabel": "Cargando...",
   "errorLabel": "Algo salió mal",
-  "retryLabel": "Reintentar"
+  "retryLabel": "Reintentar",
+  "navHome": "Inicio",
+  "homeGreeting": "¡Hola! 👋",
+  "homeQuestionsRemaining": "Estás a {count} preguntas de dominar el examen.",
+  "@homeQuestionsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeQuestionsMastered": "{mastered} / {total} preguntas dominadas",
+  "@homeQuestionsMastered": {
+    "placeholders": {
+      "mastered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "homeStreakDays": "{count} días consecutivos",
+  "@homeStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLeaguePointsToNext": "Te faltan {points} puntos para subir de liga",
+  "@homeLeaguePointsToNext": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLeagueMaxReached": "¡Llegaste a la liga más alta!",
+  "homeStartPractice": "Comenzar práctica",
+  "homeCategoriesTitle": "Categorías",
+  "categoryGovernment": "Gobierno",
+  "categoryHistory": "Historia",
+  "categoryCivics": "Educación cívica",
+  "homeSmartReviewTitle": "Repaso inteligente",
+  "homeSmartReviewNoData": "Sigue practicando para desbloquear recomendaciones personalizadas.",
+  "homeSmartReviewWeakCategory": "Tu categoría más débil es \"{category}\". Repásala hoy.",
+  "@homeSmartReviewWeakCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingSkip": "Saltar",
+  "onboardingNext": "Siguiente",
+  "onboardingStart": "Comenzar ahora",
+  "onboardingTitle1": "Prepárate para tu entrevista de ciudadanía",
+  "onboardingBody1": "Practica las 100 preguntas oficiales de USCIS de forma sencilla, rápida y sin conexión a internet.",
+  "onboardingTitle2": "Mantén tu constancia",
+  "onboardingBody2": "Estudiar 5 minutos al día es más efectivo que una sesión prolongada ocasional.",
+  "onboardingTitle3": "Avanza de nivel",
+  "onboardingBody3": "Gana puntos, desbloquea insignias y progresa a través de diferentes niveles de dominio.",
+  "onboardingTitle4": "Inicia tu camino hacia la ciudadanía",
+  "onboardingBody4": "Todo lo que practiques aquí queda guardado en tu dispositivo, listo cuando quieras seguir.",
+  "resultCelebrationTitle": "🎉 ¡Buen trabajo!",
+  "resultComparisonUp": "+{delta} puntos respecto a tu sesión anterior",
+  "@resultComparisonUp": {
+    "placeholders": {
+      "delta": {
+        "type": "int"
+      }
+    }
+  },
+  "resultComparisonDown": "-{delta} puntos respecto a tu sesión anterior",
+  "@resultComparisonDown": {
+    "placeholders": {
+      "delta": {
+        "type": "int"
+      }
+    }
+  },
+  "resultComparisonSame": "Igual que tu última sesión",
+  "resultReviewErrors": "Revisar errores ({count})",
+  "@resultReviewErrors": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resultHideErrors": "Ocultar errores",
+  "resultNoErrors": "¡Perfecto! Sin errores esta vez.",
+  "resultCorrectAnswerLabel": "Respuesta correcta"
 }

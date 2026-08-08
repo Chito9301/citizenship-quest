@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// ---------------------------------------------------------------------
 /// Modelos "planos" que representan las preguntas cargadas desde
 /// assets/data/preguntas.json. Viven solo en memoria durante la partida.
@@ -68,6 +70,66 @@ class QuizQuestion {
   String explanationFor(String languageCode) {
     return languageCode == 'es' ? explanationEs : explanationEn;
   }
+
+  /// Devuelve una copia de esta pregunta con el ORDEN de las opciones
+  /// mezclado y `correctIndex` recalculado para seguir apuntando a la
+  /// respuesta correcta en su nueva posición.
+  ///
+  /// En `assets/data/preguntas.json` la respuesta correcta siempre está
+  /// en la posición 0 (es más fácil de escribir/mantener así), así que
+  /// SIN este paso la opción correcta aparecería siempre primero en la
+  /// UI. Se aplica una vez por pregunta al armar cada partida (ver
+  /// QuizController.startQuiz), no en cada rebuild, para que el orden
+  /// no cambie mientras el usuario está respondiendo.
+  QuizQuestion shuffled([Random? random]) {
+    final rnd = random ?? Random();
+    final order = List<int>.generate(options.length, (i) => i)..shuffle(rnd);
+    final reorderedOptions = [for (final originalIndex in order) options[originalIndex]];
+    final newCorrectIndex = order.indexOf(correctIndex);
+
+    return QuizQuestion(
+      id: id,
+      category: category,
+      difficulty: difficulty,
+      questionEn: questionEn,
+      questionEs: questionEs,
+      options: reorderedOptions,
+      correctIndex: newCorrectIndex,
+      explanationEn: explanationEn,
+      explanationEs: explanationEs,
+    );
+  }
+}
+
+/// ---------------------------------------------------------------------
+/// Desempeño por categoría (Gobierno, Historia, Educación Cívica...).
+/// Se usa solo para mostrar el porcentaje por categoría en Home; no
+/// afecta el puntaje ni ninguna regla del quiz.
+/// ---------------------------------------------------------------------
+
+class CategoryStat {
+  final int correct;
+  final int total;
+
+  const CategoryStat({this.correct = 0, this.total = 0});
+
+  double get accuracy => total == 0 ? 0 : correct / total;
+
+  CategoryStat copyWith({int? correct, int? total}) {
+    return CategoryStat(
+      correct: correct ?? this.correct,
+      total: total ?? this.total,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'correct': correct, 'total': total};
+
+  factory CategoryStat.fromJson(Map<String, dynamic> json) {
+    return CategoryStat(
+      correct: json['correct'] as int? ?? 0,
+      total: json['total'] as int? ?? 0,
+    );
+  }
 }
 
 /// ---------------------------------------------------------------------
@@ -87,6 +149,12 @@ class UserProgress {
   final int longestStreakDays;
   final DateTime? lastPlayedAt;
   final List<String> unlockedBadgeIds;
+  final Map<String, CategoryStat> categoryStats;
+
+  /// Puntaje de la última partida completada (no acumulado). Se usa
+  /// solo para mostrar "+N respecto a tu sesión anterior" en la
+  /// pantalla de resultados; no afecta totalScore ni ninguna regla.
+  final int? lastSessionScore;
 
   const UserProgress({
     this.profileKey = 'local_profile',
@@ -98,6 +166,8 @@ class UserProgress {
     this.longestStreakDays = 0,
     this.lastPlayedAt,
     this.unlockedBadgeIds = const [],
+    this.categoryStats = const {},
+    this.lastSessionScore,
   });
 
   double get accuracy {
@@ -115,6 +185,9 @@ class UserProgress {
     int? longestStreakDays,
     DateTime? lastPlayedAt,
     List<String>? unlockedBadgeIds,
+    Map<String, CategoryStat>? categoryStats,
+    int? lastSessionScore,
+    bool clearLastSessionScore = false,
   }) {
     return UserProgress(
       profileKey: profileKey ?? this.profileKey,
@@ -127,6 +200,10 @@ class UserProgress {
       longestStreakDays: longestStreakDays ?? this.longestStreakDays,
       lastPlayedAt: lastPlayedAt ?? this.lastPlayedAt,
       unlockedBadgeIds: unlockedBadgeIds ?? this.unlockedBadgeIds,
+      categoryStats: categoryStats ?? this.categoryStats,
+      lastSessionScore: clearLastSessionScore
+          ? null
+          : (lastSessionScore ?? this.lastSessionScore),
     );
   }
 
@@ -140,9 +217,12 @@ class UserProgress {
         'longestStreakDays': longestStreakDays,
         'lastPlayedAt': lastPlayedAt?.toIso8601String(),
         'unlockedBadgeIds': unlockedBadgeIds,
+        'categoryStats': categoryStats.map((k, v) => MapEntry(k, v.toJson())),
+        'lastSessionScore': lastSessionScore,
       };
 
   factory UserProgress.fromJson(Map<String, dynamic> json) {
+    final rawCategoryStats = json['categoryStats'] as Map<String, dynamic>?;
     return UserProgress(
       profileKey: json['profileKey'] as String? ?? 'local_profile',
       totalScore: json['totalScore'] as int? ?? 0,
@@ -157,6 +237,12 @@ class UserProgress {
       unlockedBadgeIds: (json['unlockedBadgeIds'] as List<dynamic>? ?? [])
           .map((e) => e as String)
           .toList(),
+      categoryStats: rawCategoryStats == null
+          ? const {}
+          : rawCategoryStats.map(
+              (k, v) => MapEntry(k, CategoryStat.fromJson(v as Map<String, dynamic>)),
+            ),
+      lastSessionScore: json['lastSessionScore'] as int?,
     );
   }
 }

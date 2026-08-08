@@ -1,20 +1,24 @@
 {
   "@@locale": "en",
   "appTitle": "Citizenship Quest",
-  "@appTitle": {"description": "App title shown in the app bar and OS launcher"},
-
+  "@appTitle": {
+    "description": "App title shown in the app bar and OS launcher"
+  },
   "navQuiz": "Quiz",
   "navProfile": "Profile",
   "navRanking": "Ranking",
   "navSettings": "Settings",
-
   "quizTitle": "Citizenship Quiz",
   "startQuiz": "Start Quiz",
   "questionOf": "Question {current} of {total}",
   "@questionOf": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "nextQuestion": "Next",
@@ -24,19 +28,25 @@
   "correctAnswer": "Correct!",
   "incorrectAnswer": "Incorrect",
   "explanationLabel": "Why?",
-
   "resultTitle": "Quiz Results",
   "yourScore": "Your score",
+  "avgTimePerQuestion": "Avg. time / question",
+  "motivationExcellent": "Outstanding! You're ready for the real test.",
+  "motivationGood": "Great job! A bit more practice and you'll master it.",
+  "motivationKeepPracticing": "Keep practicing — you're building real progress.",
   "correctCount": "{correct} of {total} correct",
   "@correctCount": {
     "placeholders": {
-      "correct": {"type": "int"},
-      "total": {"type": "int"}
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "playAgain": "Play again",
   "goHome": "Go home",
-
   "profileTitle": "Profile",
   "totalScore": "Total score",
   "quizzesPlayed": "Quizzes played",
@@ -44,18 +54,111 @@
   "currentStreak": "Current streak",
   "badgesLabel": "Badges",
   "noBadgesYet": "No badges yet. Keep playing!",
-
   "rankingTitle": "Ranking",
   "rankingLoading": "Loading ranking...",
-
   "settingsTitle": "Settings",
   "languageLabel": "Language",
   "englishOption": "English",
   "spanishOption": "Español",
   "syncNow": "Sync now",
   "syncSuccess": "Sync complete",
-
+  "syncNoConnection": "No internet connection",
+  "syncNoPendingData": "Nothing to sync",
+  "syncFailed": "Sync failed, will retry later",
   "loadingLabel": "Loading...",
   "errorLabel": "Something went wrong",
-  "retryLabel": "Retry"
+  "retryLabel": "Retry",
+  "navHome": "Home",
+  "homeGreeting": "Hello! 👋",
+  "homeQuestionsRemaining": "You're {count} questions away from mastering the exam.",
+  "@homeQuestionsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeQuestionsMastered": "{mastered} / {total} questions mastered",
+  "@homeQuestionsMastered": {
+    "placeholders": {
+      "mastered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "homeStreakDays": "{count} days in a row",
+  "@homeStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLeaguePointsToNext": "{points} points to reach the next league",
+  "@homeLeaguePointsToNext": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLeagueMaxReached": "You reached the top league!",
+  "homeStartPractice": "Start practice",
+  "homeCategoriesTitle": "Categories",
+  "categoryGovernment": "Government",
+  "categoryHistory": "History",
+  "categoryCivics": "Civics",
+  "homeSmartReviewTitle": "Smart review",
+  "homeSmartReviewNoData": "Keep practicing to unlock personalized recommendations.",
+  "homeSmartReviewWeakCategory": "Your weakest category is \"{category}\". Review it today.",
+  "@homeSmartReviewWeakCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingStart": "Start now",
+  "onboardingTitle1": "Get ready for your citizenship interview",
+  "onboardingBody1": "Practice the official 100 USCIS questions — simply, quickly, and fully offline.",
+  "onboardingTitle2": "Keep your consistency",
+  "onboardingBody2": "Studying 5 minutes a day is more effective than one long session now and then.",
+  "onboardingTitle3": "Level up",
+  "onboardingBody3": "Earn points, unlock badges, and progress through mastery levels.",
+  "onboardingTitle4": "Start your path to citizenship",
+  "onboardingBody4": "Everything you practice here stays saved on your device, ready whenever you are.",
+  "resultCelebrationTitle": "🎉 Great job!",
+  "resultComparisonUp": "+{delta} points vs. your previous session",
+  "@resultComparisonUp": {
+    "placeholders": {
+      "delta": {
+        "type": "int"
+      }
+    }
+  },
+  "resultComparisonDown": "-{delta} points vs. your previous session",
+  "@resultComparisonDown": {
+    "placeholders": {
+      "delta": {
+        "type": "int"
+      }
+    }
+  },
+  "resultComparisonSame": "Same as your last session",
+  "resultReviewErrors": "Review errors ({count})",
+  "@resultReviewErrors": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resultHideErrors": "Hide errors",
+  "resultNoErrors": "Perfect! No mistakes this time.",
+  "resultCorrectAnswerLabel": "Correct answer"
 }

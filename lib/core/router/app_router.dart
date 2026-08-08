@@ -1,12 +1,25 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/localization/app_localizations.dart';
+import '../../features/home/screens/home_screen.dart';
+import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
-import '../../features/quiz/screens/quiz_screen.dart';
 import '../../features/ranking/screens/ranking_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../local_storage_service.dart';
+
+/// Se inicializa con el valor ya cargado en disco por
+/// `LocalStorageService.instance` (main.dart hace `await init()` antes
+/// de `runApp`, así que esta lectura inicial es segura y síncrona). El
+/// onboarding lo marca como visto escribiendo en este mismo provider,
+/// sin necesidad de agregar una ruta nueva de GoRouter para eso.
+final onboardingCompletedProvider = StateProvider<bool>((ref) {
+  return LocalStorageService.instance.hasSeenOnboarding;
+});
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -14,14 +27,37 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const HomeShell(),
+        builder: (context, state) => const AppRoot(),
       ),
     ],
   );
 });
 
-/// Contenedor con navegación inferior entre las 4 secciones del Sprint 1:
-/// Quiz, Perfil, Ranking y Ajustes.
+/// Punto de entrada de la app: muestra el Onboarding la primera vez, y
+/// HomeShell (con la navegación inferior) las siguientes.
+class AppRoot extends ConsumerWidget {
+  const AppRoot({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onboardingCompleted = ref.watch(onboardingCompletedProvider);
+
+    if (!onboardingCompleted) {
+      return OnboardingScreen(
+        onComplete: () {
+          ref.read(onboardingCompletedProvider.notifier).state = true;
+          unawaited(LocalStorageService.instance.setHasSeenOnboarding(true));
+        },
+      );
+    }
+
+    return const HomeShell();
+  }
+}
+
+/// Contenedor con navegación inferior entre las 4 secciones: Inicio
+/// (Home/lobby, desde donde se entra al quiz), Perfil, Ranking y
+/// Ajustes.
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
 
@@ -33,7 +69,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   int _currentIndex = 0;
 
   static const _screens = [
-    QuizScreen(),
+    HomeScreen(),
     ProfileScreen(),
     RankingScreen(),
     SettingsScreen(),
@@ -55,9 +91,9 @@ class _HomeShellState extends ConsumerState<HomeShell> {
         },
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.quiz_outlined),
-            selectedIcon: const Icon(Icons.quiz),
-            label: l10n.navQuiz,
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.navHome,
           ),
           NavigationDestination(
             icon: const Icon(Icons.person_outline),

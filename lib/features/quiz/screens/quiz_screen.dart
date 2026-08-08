@@ -8,35 +8,42 @@ import '../widgets/power_up_bar.dart';
 import '../widgets/question_card.dart';
 import 'quiz_result_screen.dart';
 
-class QuizScreen extends ConsumerStatefulWidget {
+/// Pantalla del quiz. Es un ConsumerWidget (no Stateful) a propósito:
+/// el auto-inicio de una partida se dispara reactivamente cada vez que
+/// el estado vuelve a `initial` (ver más abajo), no solo la primera vez
+/// que el widget se monta. Esto es necesario porque esta pantalla vive
+/// dentro de un IndexedStack (HomeShell) y nunca se destruye al
+/// cambiar de pestaña, así que `initState` solo se ejecutaría una vez
+/// en toda la vida de la app.
+class QuizScreen extends ConsumerWidget {
   const QuizScreen({super.key});
 
   @override
-  ConsumerState<QuizScreen> createState() => _QuizScreenState();
-}
-
-class _QuizScreenState extends ConsumerState<QuizScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final state = ref.read(quizControllerProvider);
-      if (state.status == QuizStatus.initial) {
-        ref.read(quizControllerProvider.notifier).startQuiz();
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(quizControllerProvider);
     final controller = ref.read(quizControllerProvider.notifier);
 
+    // Auto-inicio reactivo: si el estado es `initial` (primer arranque
+    // de la app, o después de `controller.reset()` al volver al
+    // inicio), programa el arranque de una partida nueva para el
+    // próximo frame. Se re-verifica el estado dentro del callback por
+    // si el usuario navegó de vuelta muy rápido.
+    if (state.status == QuizStatus.initial) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (ref.read(quizControllerProvider).status == QuizStatus.initial) {
+          controller.startQuiz();
+        }
+      });
+    }
+
     ref.listen<QuizState>(quizControllerProvider, (previous, next) {
       if (next.status == QuizStatus.finished &&
           previous?.status != QuizStatus.finished) {
-        Navigator.of(context).pushReplacement(
+        // `push` (no `pushReplacement`): mantiene HomeShell —y su barra
+        // de navegación inferior— vivo debajo de la pantalla de
+        // resultados, para poder volver con un simple `pop()`.
+        Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => const QuizResultScreen()),
         );
       }
@@ -116,7 +123,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           ),
           const SizedBox(height: 12),
           ElevatedButton(
-            onPressed: state.hasAnswered ? controller.goToNextQuestion : null,
+            onPressed: (state.hasAnswered && state.status != QuizStatus.finished)
+                ? controller.goToNextQuestion
+                : null,
             child: Text(
               state.isLastQuestion ? l10n.finishQuiz : l10n.nextQuestion,
             ),

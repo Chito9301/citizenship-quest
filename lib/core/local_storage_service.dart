@@ -2,22 +2,43 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path_provider/path_provider.dart';
 
 import '../models/quiz_models.dart';
 
 /// Almacenamiento local basado en un único archivo JSON.
 ///
-/// Reemplaza a Isar para Sprint 1. No requiere build_runner ni ningún
-/// paso de generación de código: todo el (de)serializado es manual en
-/// quiz_models.dart. Pensado para funcionar bien en condiciones
-/// inestables (apagones): cada escritura es "atómica" (se escribe a un
-/// archivo temporal y luego se renombra), así que un corte de luz a
-/// mitad de guardado no corrompe los datos ya guardados.
+/// No requiere build_runner ni ningún paso de generación de código:
+/// todo el (de)serializado es manual en quiz_models.dart. Pensado para
+/// funcionar bien en condiciones inestables (apagones):
+///
+/// - Cada escritura es "atómica" (se escribe a un archivo temporal y
+///   luego se renombra), así que un corte de luz a mitad de guardado
+///   nunca corrompe el archivo principal.
+/// - Al iniciar, se limpia cualquier `.tmp` huérfano que haya quedado
+///   de un corte de luz exactamente en el instante de renombrar.
+/// - Todas las operaciones de escritura se serializan con un lock en
+///   memoria, para que dos guardados concurrentes (por ejemplo, un
+///   `saveProgress` y un `enqueueSync` casi simultáneos) nunca se
+///   pisen ni pierdan datos entre el `read` y el `write`.
+/// - Si el JSON no se puede decodificar, se recupera con datos por
+///   defecto en vez de tumbar la app.
 class LocalStorageService {
   LocalStorageService._();
 
   static final LocalStorageService instance = LocalStorageService._();
+
+  /// Crea una instancia independiente de [instance] que escribe
+  /// directamente en [file], sin pasar por `path_provider`. Pensado
+  /// exclusivamente para tests unitarios (ver test/local_storage_service_test.dart),
+  /// donde no hay un canal de plataforma real disponible.
+  @visibleForTesting
+  factory LocalStorageService.withFile(File file) {
+    final service = LocalStorageService._();
+    service._file = file;
+    return service;
+  }
 
   static const String _fileName = 'citizenship_quest_data.json';
   static const String defaultProfileKey = 'local_profile';
@@ -26,10 +47,40 @@ class LocalStorageService {
   Map<String, dynamic> _data = _defaultData();
   bool _initialized = false;
 
+  /// Memoiza la Future de inicialización: si dos llamadas a [init]
+  /// (o a cualquier método que dependa de [_ensureInit]) llegan casi
+  /// al mismo tiempo antes de que termine la primera, ambas esperan la
+  /// MISMA inicialización en vez de correr dos veces en paralelo.
+  Future<void>? _initFuture;
+
+  /// Cola de exclusión mutua en memoria: cada operación que lee y
+  /// luego escribe `_data` se encadena a esta Future, así nunca se
+  /// ejecutan dos "lecturas + escrituras" en paralelo sobre el mismo
+  /// estado.
+  Future<void> _writeLock = Future.value();
+
   final StreamController<UserProgress?> _progressController =
       StreamController<UserProgress?>.broadcast();
 
   bool get isInitialized => _initialized;
+
+  // -------------------------------------------------------------------
+  // Onboarding (flag simple, independiente de UserProgress)
+  // -------------------------------------------------------------------
+
+  /// Lectura síncrona a propósito: para cuando se llama, `main.dart` ya
+  /// hizo `await LocalStorageService.instance.init()`, así que `_data`
+  /// ya está cargado en memoria. Evita tener que modelar el arranque
+  /// del router como un estado "cargando" solo por este flag.
+  bool get hasSeenOnboarding => _data['hasSeenOnboarding'] as bool? ?? false;
+
+  Future<void> setHasSeenOnboarding(bool value) {
+    return _synchronized(() async {
+      await _ensureInit();
+      _data['hasSeenOnboarding'] = value;
+      await _persist();
+    });
+  }
 
   static Map<String, dynamic> _defaultData() => {
         'userProgress':
@@ -38,11 +89,29 @@ class LocalStorageService {
         'nextSyncId': 1,
       };
 
-  Future<void> init() async {
-    if (_initialized) return;
+  Future<void> init() {
+    return _initFuture ??= _performInit();
+  }
 
-    final dir = await getApplicationDocumentsDirectory();
-    _file = File('${dir.path}/$_fileName');
+  Future<void> _performInit() async {
+    if (_file == null) {
+      final dir = await getApplicationDocumentsDirectory();
+      _file = File('${dir.path}/$_fileName');
+    }
+
+    // Limpieza de arranque: si quedó un .tmp de una escritura anterior
+    // interrumpida (apagón justo antes del rename), se descarta. El
+    // archivo principal nunca se tocó durante esa escritura fallida,
+    // así que sigue siendo válido.
+    final orphanedTemp = File('${_file!.path}.tmp');
+    if (await orphanedTemp.exists()) {
+      try {
+        await orphanedTemp.delete();
+      } catch (_) {
+        // No crítico: si no se puede borrar ahora, se sobrescribirá en
+        // el próximo _persist() de todas formas.
+      }
+    }
 
     if (await _file!.exists()) {
       try {
@@ -50,7 +119,8 @@ class LocalStorageService {
         _data = jsonDecode(raw) as Map<String, dynamic>;
       } catch (_) {
         // Archivo corrupto (por ejemplo, por un apagón a mitad de una
-        // escritura anterior a este cambio). Se reinicia con datos por
+        // escritura de una versión anterior de la app, antes de que
+        // existiera la escritura atómica). Se reinicia con datos por
         // defecto en lugar de tumbar la app.
         _data = _defaultData();
         await _persist();
@@ -66,6 +136,25 @@ class LocalStorageService {
   Future<void> close() async {
     await _progressController.close();
     _initialized = false;
+    _initFuture = null;
+  }
+
+  /// Ejecuta [action] en exclusión mutua respecto de cualquier otra
+  /// operación de escritura en curso. La UI nunca se bloquea por esto:
+  /// solo se encadenan las propias tareas async de almacenamiento
+  /// entre sí, nunca el hilo de la UI.
+  Future<T> _synchronized<T>(Future<T> Function() action) {
+    final previous = _writeLock;
+    final completer = Completer<void>();
+    _writeLock = completer.future;
+
+    return previous.then((_) async {
+      try {
+        return await action();
+      } finally {
+        completer.complete();
+      }
+    });
   }
 
   /// Escritura atómica: escribe en un archivo temporal y recién ahí lo
@@ -90,20 +179,24 @@ class LocalStorageService {
 
   Future<UserProgress> getOrCreateProgress() async {
     await _ensureInit();
-    final raw = _data['userProgress'] as Map<String, dynamic>?;
-    if (raw == null) {
-      const fresh = UserProgress(profileKey: defaultProfileKey);
-      _data['userProgress'] = fresh.toJson();
-      await _persist();
-      return fresh;
-    }
-    return UserProgress.fromJson(raw);
+    return _synchronized(() async {
+      final raw = _data['userProgress'] as Map<String, dynamic>?;
+      if (raw == null) {
+        const fresh = UserProgress(profileKey: defaultProfileKey);
+        _data['userProgress'] = fresh.toJson();
+        await _persist();
+        return fresh;
+      }
+      return UserProgress.fromJson(raw);
+    });
   }
 
   Future<void> saveProgress(UserProgress progress) async {
     await _ensureInit();
-    _data['userProgress'] = progress.toJson();
-    await _persist();
+    await _synchronized(() async {
+      _data['userProgress'] = progress.toJson();
+      await _persist();
+    });
     _progressController.add(progress);
   }
 
@@ -118,37 +211,42 @@ class LocalStorageService {
   // Cola de sincronización
   // -------------------------------------------------------------------
 
-  Future<void> enqueueSync(SyncQueueItem item) async {
-    await _ensureInit();
-    final nextId = _data['nextSyncId'] as int? ?? 1;
-    final withId = item.copyWith(id: nextId);
+  Future<void> enqueueSync(SyncQueueItem item) {
+    return _synchronized(() async {
+      await _ensureInit();
+      final nextId = _data['nextSyncId'] as int? ?? 1;
+      final withId = item.copyWith(id: nextId);
 
-    final queue = List<dynamic>.from(_data['syncQueue'] as List<dynamic>? ?? []);
-    queue.add(withId.toJson());
+      final queue =
+          List<dynamic>.from(_data['syncQueue'] as List<dynamic>? ?? []);
+      queue.add(withId.toJson());
 
-    _data['syncQueue'] = queue;
-    _data['nextSyncId'] = nextId + 1;
-    await _persist();
+      _data['syncQueue'] = queue;
+      _data['nextSyncId'] = nextId + 1;
+      await _persist();
+    });
   }
 
   Future<List<SyncQueueItem>> getPendingSyncItems() async {
     await _ensureInit();
-    final queue = (_data['syncQueue'] as List<dynamic>? ?? []);
-    return queue
-        .map((e) => SyncQueueItem.fromJson(e as Map<String, dynamic>))
-        .where((item) => !item.synced)
-        .toList();
+    return _synchronized(() async {
+      final queue = (_data['syncQueue'] as List<dynamic>? ?? []);
+      return queue
+          .map((e) => SyncQueueItem.fromJson(e as Map<String, dynamic>))
+          .where((item) => !item.synced)
+          .toList();
+    });
   }
 
-  Future<void> markSynced(int id) async {
-    await _updateSyncItem(
+  Future<void> markSynced(int id) {
+    return _updateSyncItem(
       id,
       (item) => item.copyWith(synced: true, syncedAt: DateTime.now()),
     );
   }
 
-  Future<void> markSyncAttemptFailed(int id) async {
-    await _updateSyncItem(
+  Future<void> markSyncAttemptFailed(int id) {
+    return _updateSyncItem(
       id,
       (item) => item.copyWith(attemptCount: item.attemptCount + 1),
     );
@@ -157,21 +255,23 @@ class LocalStorageService {
   Future<void> _updateSyncItem(
     int id,
     SyncQueueItem Function(SyncQueueItem item) update,
-  ) async {
-    await _ensureInit();
-    final queue =
-        List<dynamic>.from(_data['syncQueue'] as List<dynamic>? ?? []);
-    final index = queue.indexWhere(
-      (e) => (e as Map<String, dynamic>)['id'] == id,
-    );
-    if (index == -1) return;
+  ) {
+    return _synchronized(() async {
+      await _ensureInit();
+      final queue =
+          List<dynamic>.from(_data['syncQueue'] as List<dynamic>? ?? []);
+      final index = queue.indexWhere(
+        (e) => (e as Map<String, dynamic>)['id'] == id,
+      );
+      if (index == -1) return;
 
-    final current =
-        SyncQueueItem.fromJson(queue[index] as Map<String, dynamic>);
-    final updated = update(current);
-    queue[index] = updated.toJson();
+      final current =
+          SyncQueueItem.fromJson(queue[index] as Map<String, dynamic>);
+      final updated = update(current);
+      queue[index] = updated.toJson();
 
-    _data['syncQueue'] = queue;
-    await _persist();
+      _data['syncQueue'] = queue;
+      await _persist();
+    });
   }
 }

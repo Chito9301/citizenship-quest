@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/localization/app_localizations.dart';
+import '../../../services/sync_service.dart';
 import '../../quiz/providers/quiz_provider.dart';
 
 /// Locale seleccionado por el usuario. `null` significa "seguir el
@@ -50,12 +51,19 @@ class SettingsScreen extends ConsumerWidget {
               label: Text(l10n.syncNow),
               onPressed: () async {
                 final syncService = ref.read(syncServiceProvider);
-                await syncService.processPendingQueue();
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.syncSuccess)),
-                  );
-                }
+                final result = await syncService.syncNow();
+                if (!context.mounted) return;
+
+                final message = switch (result) {
+                  SyncTriggerResult.noConnection => l10n.syncNoConnection,
+                  SyncTriggerResult.noPendingData => l10n.syncNoPendingData,
+                  SyncTriggerResult.success => l10n.syncSuccess,
+                  SyncTriggerResult.failed => l10n.syncFailed,
+                };
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(message)),
+                );
               },
             ),
           ],
