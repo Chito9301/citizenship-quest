@@ -26,12 +26,16 @@ class LeagueCard extends StatelessWidget {
               children: [
                 Text(league.icon, style: const TextStyle(fontSize: 28)),
                 const SizedBox(width: 10),
-                Text(
-                  league.nameFor(languageCode),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    league.nameFor(languageCode),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

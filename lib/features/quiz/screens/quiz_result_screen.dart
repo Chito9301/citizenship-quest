@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/localization/app_localizations.dart';
-import '../../../models/quiz_models.dart';
+import '../../gamification/models/badge.dart';
 import '../providers/quiz_provider.dart';
+import '../providers/quiz_state.dart';
 
 class QuizResultScreen extends ConsumerStatefulWidget {
   const QuizResultScreen({super.key});
@@ -80,6 +81,10 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
               ),
               const SizedBox(height: 20),
               _MotivationalMessage(accuracy: accuracy),
+              if (state.newlyUnlockedBadgeIds.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                _NewBadgesBanner(badgeIds: state.newlyUnlockedBadgeIds),
+              ],
               const SizedBox(height: 24),
 
               if (failedQuestions.isEmpty)
@@ -96,8 +101,8 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                 ),
                 if (_showFailedQuestions) ...[
                   const SizedBox(height: 12),
-                  for (final question in failedQuestions)
-                    _FailedQuestionCard(question: question),
+                  for (final result in failedQuestions)
+                    _FailedQuestionCard(result: result),
                 ],
               ],
 
@@ -215,15 +220,19 @@ class _ResultStatsRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _StatChip(
-          icon: Icons.percent,
-          label: l10n.accuracyLabel,
-          value: '$accuracyPercent%',
+        Expanded(
+          child: _StatChip(
+            icon: Icons.percent,
+            label: l10n.accuracyLabel,
+            value: '$accuracyPercent%',
+          ),
         ),
-        _StatChip(
-          icon: Icons.timer_outlined,
-          label: l10n.avgTimePerQuestion,
-          value: '${avgSeconds.toStringAsFixed(1)}s',
+        Expanded(
+          child: _StatChip(
+            icon: Icons.timer_outlined,
+            label: l10n.avgTimePerQuestion,
+            value: '${avgSeconds.toStringAsFixed(1)}s',
+          ),
         ),
       ],
     );
@@ -244,17 +253,23 @@ class _StatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, color: Theme.of(context).colorScheme.primary),
         const SizedBox(height: 4),
         Text(
           value,
+          textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
               .titleMedium
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
       ],
     );
   }
@@ -295,6 +310,49 @@ class _MotivationalMessage extends StatelessWidget {
   }
 }
 
+class _NewBadgesBanner extends StatelessWidget {
+  const _NewBadgesBanner({required this.badgeIds});
+
+  final List<String> badgeIds;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final badges = badgeIds.map(BadgeCatalog.byId).whereType<BadgeDef>().toList();
+    if (badges.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.amber.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.amber),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.resultNewBadgesTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: badges
+                .map((b) => Chip(
+                      avatar: Text(b.icon, style: const TextStyle(fontSize: 16)),
+                      label: Text(b.titleFor(languageCode)),
+                    ))
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _NoErrorsBanner extends StatelessWidget {
   const _NoErrorsBanner({required this.l10n});
 
@@ -320,21 +378,21 @@ class _NoErrorsBanner extends StatelessWidget {
   }
 }
 
-/// Tarjeta de una pregunta fallada: enunciado, respuesta correcta y
-/// explicación. No muestra qué opción eligió el usuario porque el
-/// estado del quiz no guarda esa elección más allá de la pregunta
-/// actual (solo si fue correcta o no) — mostrarla sería inventar un
-/// dato que no existe.
+/// Tarjeta de una pregunta fallada: enunciado, respuesta elegida por el
+/// usuario, respuesta correcta y explicación. Los tres textos salen
+/// directamente de `QuizQuestion` (que viene de assets/data/preguntas.json)
+/// y de `selectedOptionIndex` (lo que el usuario tocó de verdad) — nada
+/// se inventa ni se aproxima.
 class _FailedQuestionCard extends StatelessWidget {
-  const _FailedQuestionCard({required this.question});
+  const _FailedQuestionCard({required this.result});
 
-  final QuizQuestion question;
+  final FailedQuestionResult result;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
-    final correctOption = question.options[question.correctIndex];
+    final question = result.question;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -347,7 +405,21 @@ class _FailedQuestionCard extends StatelessWidget {
               question.questionFor(languageCode),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.cancel, size: 18, color: Theme.of(context).colorScheme.error),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '${l10n.resultYourAnswerLabel}: ${result.selectedOption.textFor(languageCode)}',
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -355,12 +427,12 @@ class _FailedQuestionCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '${l10n.resultCorrectAnswerLabel}: ${correctOption.textFor(languageCode)}',
+                    '${l10n.resultCorrectAnswerLabel}: ${result.correctOption.textFor(languageCode)}',
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               question.explanationFor(languageCode),
               style: Theme.of(context).textTheme.bodySmall,

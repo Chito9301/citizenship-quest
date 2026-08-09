@@ -47,9 +47,19 @@ class CategoryProgressCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(categoryDisplayName(categoryId, l10n)),
+              // Expanded + ellipsis: sin esto, un nombre de categoría
+              // largo (ej. "Educación cívica" o el fallback
+              // capitalizado de un id nuevo) puede desbordar cuando
+              // comparte la fila con el porcentaje a la derecha.
+              Expanded(
+                child: Text(
+                  categoryDisplayName(categoryId, l10n),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
                 stat.total == 0 ? '—' : '$percent%',
                 style: const TextStyle(fontWeight: FontWeight.bold),

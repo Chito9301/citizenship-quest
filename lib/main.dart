@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/local_storage_service.dart';
 import 'core/localization/app_localizations.dart';
+import 'core/notifications/notification_service.dart';
 import 'core/router/app_router.dart';
 import 'features/settings/screens/settings_screen.dart';
 
@@ -12,6 +13,24 @@ Future<void> main() async {
   // El almacenamiento local debe inicializarse antes de que cualquier
   // provider intente leer/escribir datos.
   await LocalStorageService.instance.init();
+
+  // Notificaciones: se inicializa el plugin y, si el usuario ya había
+  // activado el recordatorio diario en una sesión anterior, se vuelve
+  // a programar en cada arranque. Es idempotente (mismo id de
+  // notificación), así que no crea duplicados; sirve como red de
+  // seguridad si el sistema operativo llegó a descartar la alarma.
+  await NotificationService.instance.init();
+  if (LocalStorageService.instance.isDailyReminderEnabled) {
+    // No se pide permiso aquí: si el usuario lo revocó desde los
+    // ajustes del sistema, la próxima vez que abra la pantalla de
+    // Ajustes y reintente activarlo se le volverá a pedir.
+    await NotificationService.instance.scheduleDailyReminder(
+      hour: LocalStorageService.instance.reminderHour,
+      minute: LocalStorageService.instance.reminderMinute,
+      title: 'Citizenship Quest',
+      body: '🔥 Tu progreso te espera. Dedica 5 minutos hoy.',
+    );
+  }
 
   runApp(const ProviderScope(child: CitizenshipQuestApp()));
 }

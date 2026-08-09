@@ -82,6 +82,28 @@ class LocalStorageService {
     });
   }
 
+  // -------------------------------------------------------------------
+  // Preferencias del recordatorio diario (notificaciones locales)
+  // -------------------------------------------------------------------
+
+  bool get isDailyReminderEnabled => _data['reminderEnabled'] as bool? ?? false;
+  int get reminderHour => _data['reminderHour'] as int? ?? 19;
+  int get reminderMinute => _data['reminderMinute'] as int? ?? 0;
+
+  Future<void> saveReminderPreference({
+    required bool enabled,
+    required int hour,
+    required int minute,
+  }) {
+    return _synchronized(() async {
+      await _ensureInit();
+      _data['reminderEnabled'] = enabled;
+      _data['reminderHour'] = hour;
+      _data['reminderMinute'] = minute;
+      await _persist();
+    });
+  }
+
   static Map<String, dynamic> _defaultData() => {
         'userProgress':
             const UserProgress(profileKey: defaultProfileKey).toJson(),

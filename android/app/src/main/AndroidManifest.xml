@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Notificaciones locales (recordatorio diario). POST_NOTIFICATIONS
+         es obligatorio desde Android 13 (API 33) y se pide en runtime
+         vía NotificationService.requestPermission(). RECEIVE_BOOT_COMPLETED
+         + los receivers de abajo son los que hacen que el recordatorio
+         siga programado después de reiniciar el teléfono. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:label="Citizenship Quest"
         android:name="${applicationName}"
@@ -24,5 +32,23 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Requeridos por flutter_local_notifications para que las
+             notificaciones programadas (zonedSchedule) se re-registren
+             tanto tras un reinicio del dispositivo como después de
+             actualizar la app. -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
+

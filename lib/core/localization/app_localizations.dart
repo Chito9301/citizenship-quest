@@ -40,6 +40,7 @@ class AppLocalizations {
       'appTitle': 'Citizenship Quest',
       'navQuiz': 'Quiz',
       'navHome': 'Home',
+      'navStats': 'Stats',
       'navProfile': 'Profile',
       'navRanking': 'Ranking',
       'navSettings': 'Settings',
@@ -63,6 +64,7 @@ class AppLocalizations {
       'resultNoErrors': 'Perfect! No mistakes this time.',
       'resultHideErrors': 'Hide errors',
       'resultCorrectAnswerLabel': 'Correct answer',
+      'resultYourAnswerLabel': 'Your answer',
       'playAgain': 'Play again',
       'goHome': 'Go home',
       'profileTitle': 'Profile',
@@ -108,11 +110,30 @@ class AppLocalizations {
       'onboardingBody3': 'Earn points, unlock badges, and progress through mastery levels.',
       'onboardingTitle4': 'Start your path to citizenship',
       'onboardingBody4': 'Everything you practice here stays saved on your device, ready whenever you are.',
+      // Stats
+      'statsTitle': 'Statistics',
+      'statsGlobalAccuracy': 'Global accuracy',
+      'statsQuestionsMastered': 'Questions mastered',
+      'statsTotalStudyTime': 'Total study time',
+      'statsStrongestCategory': 'Strongest category',
+      'statsWeakestCategory': 'Weakest category',
+      'statsActivityCalendarTitle': 'Last 7 days',
+      // Notifications
+      'notificationsSectionTitle': 'Notifications',
+      'dailyReminderLabel': 'Daily reminder',
+      'dailyReminderSubtitle': 'Get a nudge to practice every day',
+      'reminderTimeLabel': 'Reminder time',
+      'notificationsPermissionDenied': 'Notification permission was denied',
+      'notificationTitle': '🔥 Citizenship Quest',
+      'notificationBody': 'Your progress is waiting. Spend 5 minutes today and keep moving toward citizenship.',
+      // Result screen: new badges
+      'resultNewBadgesTitle': '🏅 New badges unlocked!',
     },
     'es': {
       'appTitle': 'Citizenship Quest',
       'navQuiz': 'Quiz',
       'navHome': 'Inicio',
+      'navStats': 'Estadísticas',
       'navProfile': 'Perfil',
       'navRanking': 'Ranking',
       'navSettings': 'Ajustes',
@@ -136,6 +157,7 @@ class AppLocalizations {
       'resultNoErrors': '¡Perfecto! Sin errores esta vez.',
       'resultHideErrors': 'Ocultar errores',
       'resultCorrectAnswerLabel': 'Respuesta correcta',
+      'resultYourAnswerLabel': 'Tu respuesta',
       'playAgain': 'Jugar de nuevo',
       'goHome': 'Ir al inicio',
       'profileTitle': 'Perfil',
@@ -181,6 +203,24 @@ class AppLocalizations {
       'onboardingBody3': 'Gana puntos, desbloquea insignias y progresa a través de diferentes niveles de dominio.',
       'onboardingTitle4': 'Inicia tu camino hacia la ciudadanía',
       'onboardingBody4': 'Todo lo que practiques aquí queda guardado en tu dispositivo, listo cuando quieras seguir.',
+      // Estadísticas
+      'statsTitle': 'Estadísticas',
+      'statsGlobalAccuracy': 'Precisión global',
+      'statsQuestionsMastered': 'Preguntas dominadas',
+      'statsTotalStudyTime': 'Tiempo total de estudio',
+      'statsStrongestCategory': 'Categoría más fuerte',
+      'statsWeakestCategory': 'Categoría más débil',
+      'statsActivityCalendarTitle': 'Últimos 7 días',
+      // Notificaciones
+      'notificationsSectionTitle': 'Notificaciones',
+      'dailyReminderLabel': 'Recordatorio diario',
+      'dailyReminderSubtitle': 'Recibe un empujón para practicar cada día',
+      'reminderTimeLabel': 'Hora del recordatorio',
+      'notificationsPermissionDenied': 'Se denegó el permiso de notificaciones',
+      'notificationTitle': '🔥 Citizenship Quest',
+      'notificationBody': 'Tu progreso te espera. Dedica 5 minutos hoy y sigue avanzando hacia la ciudadanía.',
+      // Pantalla de resultados: insignias nuevas
+      'resultNewBadgesTitle': '🏅 ¡Nuevas insignias desbloqueadas!',
     },
   };
 
@@ -216,6 +256,22 @@ class AppLocalizations {
   String get resultNoErrors => _t('resultNoErrors');
   String get resultHideErrors => _t('resultHideErrors');
   String get resultCorrectAnswerLabel => _t('resultCorrectAnswerLabel');
+  String get resultYourAnswerLabel => _t('resultYourAnswerLabel');
+  String get resultNewBadgesTitle => _t('resultNewBadgesTitle');
+  String get statsTitle => _t('statsTitle');
+  String get statsGlobalAccuracy => _t('statsGlobalAccuracy');
+  String get statsQuestionsMastered => _t('statsQuestionsMastered');
+  String get statsTotalStudyTime => _t('statsTotalStudyTime');
+  String get statsStrongestCategory => _t('statsStrongestCategory');
+  String get statsWeakestCategory => _t('statsWeakestCategory');
+  String get statsActivityCalendarTitle => _t('statsActivityCalendarTitle');
+  String get notificationsSectionTitle => _t('notificationsSectionTitle');
+  String get dailyReminderLabel => _t('dailyReminderLabel');
+  String get dailyReminderSubtitle => _t('dailyReminderSubtitle');
+  String get reminderTimeLabel => _t('reminderTimeLabel');
+  String get notificationsPermissionDenied => _t('notificationsPermissionDenied');
+  String get notificationTitle => _t('notificationTitle');
+  String get notificationBody => _t('notificationBody');
   String get playAgain => _t('playAgain');
   String get goHome => _t('goHome');
   String get profileTitle => _t('profileTitle');
@@ -240,6 +296,7 @@ class AppLocalizations {
   String get errorLabel => _t('errorLabel');
   String get retryLabel => _t('retryLabel');
   String get navHome => _t('navHome');
+  String get navStats => _t('navStats');
   String get homeGreeting => _t('homeGreeting');
   String get homeStartPractice => _t('homeStartPractice');
   String get homeCategoriesTitle => _t('homeCategoriesTitle');

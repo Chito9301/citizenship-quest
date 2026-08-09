@@ -33,9 +33,12 @@ class HomeScreen extends ConsumerWidget {
           data: (progress) {
             final userProgress = progress ?? const UserProgress();
             final allQuestions = questionsAsync.valueOrNull ?? const <QuizQuestion>[];
-            final totalCount = allQuestions.length;
+            // El denominador es el banco OFICIAL de USCIS (100), no la
+            // cantidad de preguntas que hay hoy en preguntas.json.
+            // Ver comentario en officialUscisQuestionBankSize.
+            const totalCount = officialUscisQuestionBankSize;
             final masteredCount =
-                userProgress.totalCorrectAnswers.clamp(0, totalCount == 0 ? 0 : totalCount);
+                userProgress.totalCorrectAnswers.clamp(0, totalCount);
 
             final categories = {for (final q in allQuestions) q.category};
 
@@ -47,13 +50,12 @@ class HomeScreen extends ConsumerWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 4),
-                if (totalCount > 0)
-                  Text(
-                    l10n.homeQuestionsRemaining(
-                      (totalCount - masteredCount).clamp(0, totalCount),
-                    ),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                Text(
+                  l10n.homeQuestionsRemaining(
+                    (totalCount - masteredCount).clamp(0, totalCount),
                   ),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 const SizedBox(height: 20),
 
                 ProgressCard(masteredCount: masteredCount, totalCount: totalCount),

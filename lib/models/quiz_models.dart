@@ -1,5 +1,18 @@
 import 'dart:math';
 
+/// Tamaño del banco OFICIAL de preguntas de USCIS (versión 2008, la que
+/// usa el examen real). El progreso de "preguntas dominadas" se mide
+/// contra este número fijo, NO contra `assets/data/preguntas.json`.
+///
+/// IMPORTANTE: a día de hoy el banco local en preguntas.json tiene
+/// menos de 100 preguntas transcritas (ver conteo real en el propio
+/// archivo). Eso significa que "dominadas" nunca podrá llegar a 100/100
+/// hasta que se complete la transcripción del banco oficial completo.
+/// Se prioriza mostrar el denominador correcto (la meta real del
+/// examen) antes que un número que "cierre bonito" pero sea engañoso
+/// sobre cuánto le falta al usuario para el examen real.
+const int officialUscisQuestionBankSize = 100;
+
 /// ---------------------------------------------------------------------
 /// Modelos "planos" que representan las preguntas cargadas desde
 /// assets/data/preguntas.json. Viven solo en memoria durante la partida.
@@ -156,6 +169,16 @@ class UserProgress {
   /// pantalla de resultados; no afecta totalScore ni ninguna regla.
   final int? lastSessionScore;
 
+  /// Segundos de estudio acumulados (suma de la duración de cada
+  /// partida). Solo para la pantalla de Estadísticas.
+  final int totalStudySeconds;
+
+  /// Fechas (formato 'yyyy-MM-dd', hora UTC) en las que se completó al
+  /// menos una partida. Se usa para el calendario de actividad de los
+  /// últimos 7 días. Se limita a las últimas 30 entradas para que el
+  /// archivo JSON no crezca indefinidamente.
+  final List<String> activityDates;
+
   const UserProgress({
     this.profileKey = 'local_profile',
     this.totalScore = 0,
@@ -168,6 +191,8 @@ class UserProgress {
     this.unlockedBadgeIds = const [],
     this.categoryStats = const {},
     this.lastSessionScore,
+    this.totalStudySeconds = 0,
+    this.activityDates = const [],
   });
 
   double get accuracy {
@@ -188,6 +213,8 @@ class UserProgress {
     Map<String, CategoryStat>? categoryStats,
     int? lastSessionScore,
     bool clearLastSessionScore = false,
+    int? totalStudySeconds,
+    List<String>? activityDates,
   }) {
     return UserProgress(
       profileKey: profileKey ?? this.profileKey,
@@ -204,7 +231,32 @@ class UserProgress {
       lastSessionScore: clearLastSessionScore
           ? null
           : (lastSessionScore ?? this.lastSessionScore),
+      totalStudySeconds: totalStudySeconds ?? this.totalStudySeconds,
+      activityDates: activityDates ?? this.activityDates,
     );
+  }
+
+  /// Categoría con mejor precisión (mínimo 1 pregunta respondida).
+  /// `null` si todavía no hay datos por categoría.
+  String? get strongestCategory => _extremeCategory(strongest: true);
+
+  /// Categoría con peor precisión (mínimo 1 pregunta respondida).
+  String? get weakestCategory => _extremeCategory(strongest: false);
+
+  String? _extremeCategory({required bool strongest}) {
+    String? result;
+    double? bestValue;
+    for (final entry in categoryStats.entries) {
+      if (entry.value.total == 0) continue;
+      final value = entry.value.accuracy;
+      final isBetter = bestValue == null ||
+          (strongest ? value > bestValue : value < bestValue);
+      if (isBetter) {
+        bestValue = value;
+        result = entry.key;
+      }
+    }
+    return result;
   }
 
   Map<String, dynamic> toJson() => {
@@ -219,6 +271,8 @@ class UserProgress {
         'unlockedBadgeIds': unlockedBadgeIds,
         'categoryStats': categoryStats.map((k, v) => MapEntry(k, v.toJson())),
         'lastSessionScore': lastSessionScore,
+        'totalStudySeconds': totalStudySeconds,
+        'activityDates': activityDates,
       };
 
   factory UserProgress.fromJson(Map<String, dynamic> json) {
@@ -243,6 +297,10 @@ class UserProgress {
               (k, v) => MapEntry(k, CategoryStat.fromJson(v as Map<String, dynamic>)),
             ),
       lastSessionScore: json['lastSessionScore'] as int?,
+      totalStudySeconds: json['totalStudySeconds'] as int? ?? 0,
+      activityDates: (json['activityDates'] as List<dynamic>? ?? [])
+          .map((e) => e as String)
+          .toList(),
     );
   }
 }

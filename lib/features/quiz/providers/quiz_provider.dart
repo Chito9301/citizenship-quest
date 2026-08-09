@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/local_storage_service.dart';
 import '../../../models/quiz_models.dart';
 import '../../../services/sync_service.dart';
+import '../../gamification/providers/gamification_provider.dart';
 import 'quiz_state.dart';
 
 /// Provider global de acceso al almacenamiento local (usado por
@@ -88,6 +89,10 @@ class QuizController extends StateNotifier<QuizState> {
       answeredCorrectByIndex: {
         ...state.answeredCorrectByIndex,
         state.currentIndex: isCorrect,
+      },
+      selectedOptionByIndex: {
+        ...state.selectedOptionByIndex,
+        state.currentIndex: optionIndex,
       },
     );
   }
@@ -183,9 +188,26 @@ class QuizController extends StateNotifier<QuizState> {
       ),
       categoryStats: _mergeCategoryStats(current.categoryStats),
       lastSessionScore: state.score,
+      totalStudySeconds: current.totalStudySeconds + state.elapsedSeconds,
+      activityDates: _mergeActivityDates(current.activityDates, playedAt),
     );
 
-    await storageService.saveProgress(updated);
+    final newlyUnlocked = evaluateNewlyUnlockedBadges(
+      updatedProgress: updated,
+      alreadyUnlockedIds: current.unlockedBadgeIds,
+      sessionCorrectAnswers: state.correctAnswers,
+      sessionTotalQuestions: state.totalQuestions,
+    );
+
+    final finalProgress = newlyUnlocked.isEmpty
+        ? updated
+        : updated.copyWith(
+            unlockedBadgeIds: [...current.unlockedBadgeIds, ...newlyUnlocked],
+          );
+
+    state = state.copyWith(newlyUnlockedBadgeIds: newlyUnlocked);
+
+    await storageService.saveProgress(finalProgress);
 
     await syncService.enqueueQuizCompleted(
       score: state.score,
@@ -195,6 +217,23 @@ class QuizController extends StateNotifier<QuizState> {
 
     // Best-effort: intenta vaciar la cola inmediatamente.
     unawaited(syncService.processPendingQueue());
+  }
+
+  /// Agrega la fecha (UTC, 'yyyy-MM-dd') de esta partida a la lista de
+  /// días con actividad, sin duplicar si ya se jugó hoy, y recortando
+  /// a las últimas 30 entradas.
+  List<String> _mergeActivityDates(List<String> previous, DateTime playedAt) {
+    final today = _dateOnlyUtc(playedAt);
+    final todayKey =
+        '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
+    if (previous.contains(todayKey)) return previous;
+
+    final updated = [...previous, todayKey];
+    if (updated.length > 30) {
+      return updated.sublist(updated.length - 30);
+    }
+    return updated;
   }
 
   /// Suma los resultados de esta partida (por categoría) a las stats ya

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/localization/app_localizations.dart';
+import '../../gamification/models/badge.dart';
 import '../providers/profile_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -63,9 +64,18 @@ class ProfileScreen extends ConsumerWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: progress.unlockedBadgeIds
-                        .map((id) => Chip(label: Text(id)))
-                        .toList(),
+                    children: progress.unlockedBadgeIds.map((id) {
+                      final badge = BadgeCatalog.byId(id);
+                      final languageCode = Localizations.localeOf(context).languageCode;
+                      if (badge == null) return Chip(label: Text(id));
+                      return Tooltip(
+                        message: badge.descriptionFor(languageCode),
+                        child: Chip(
+                          avatar: Text(badge.icon, style: const TextStyle(fontSize: 16)),
+                          label: Text(badge.titleFor(languageCode)),
+                        ),
+                      );
+                    }).toList(),
                   ),
               ],
             );

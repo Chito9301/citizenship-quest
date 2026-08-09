@@ -10,6 +10,7 @@ import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/ranking/screens/ranking_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../../features/stats/screens/stats_screen.dart';
 import '../local_storage_service.dart';
 
 /// Se inicializa con el valor ya cargado en disco por
@@ -55,9 +56,9 @@ class AppRoot extends ConsumerWidget {
   }
 }
 
-/// Contenedor con navegación inferior entre las 4 secciones: Inicio
-/// (Home/lobby, desde donde se entra al quiz), Perfil, Ranking y
-/// Ajustes.
+/// Contenedor con navegación inferior entre las 5 secciones: Inicio
+/// (Home/lobby, desde donde se entra al quiz), Estadísticas, Perfil,
+/// Ranking y Ajustes.
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
 
@@ -70,6 +71,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   static const _screens = [
     HomeScreen(),
+    StatsScreen(),
     ProfileScreen(),
     RankingScreen(),
     SettingsScreen(),
@@ -94,6 +96,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
             icon: const Icon(Icons.home_outlined),
             selectedIcon: const Icon(Icons.home),
             label: l10n.navHome,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.bar_chart_outlined),
+            selectedIcon: const Icon(Icons.bar_chart),
+            label: l10n.navStats,
           ),
           NavigationDestination(
             icon: const Icon(Icons.person_outline),

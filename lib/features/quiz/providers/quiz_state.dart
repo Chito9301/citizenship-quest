@@ -36,6 +36,11 @@ class QuizState {
   /// el desempeño por categoría en la pantalla Home.
   final Map<int, bool> answeredCorrectByIndex;
 
+  /// Registro de QUÉ opción (índice) eligió el usuario en cada
+  /// pregunta. Se usa solo para mostrar "tu respuesta" en "Revisar
+  /// errores"; no participa en ningún cálculo de puntaje.
+  final Map<int, int> selectedOptionByIndex;
+
   /// Marca de tiempo de inicio de la partida (para calcular tiempo
   /// promedio por pregunta en la pantalla de resultados).
   final DateTime? startedAt;
@@ -50,6 +55,11 @@ class QuizState {
   /// pantalla de resultados. `null` = esta fue la primera partida.
   final int? previousSessionScore;
 
+  /// Ids de insignias ganadas recién en ESTA partida (para mostrar la
+  /// celebración en la pantalla de resultados). No confundir con
+  /// UserProgress.unlockedBadgeIds, que es el historial completo.
+  final List<String> newlyUnlockedBadgeIds;
+
   final String? errorMessage;
 
   const QuizState({
@@ -63,9 +73,11 @@ class QuizState {
     this.fiftyFiftyUsed = false,
     this.skipUsed = false,
     this.answeredCorrectByIndex = const {},
+    this.selectedOptionByIndex = const {},
     this.startedAt,
     this.finishedAt,
     this.previousSessionScore,
+    this.newlyUnlockedBadgeIds = const [],
     this.errorMessage,
   });
 
@@ -93,12 +105,17 @@ class QuizState {
   }
 
   /// Preguntas que se respondieron incorrectamente, en el mismo orden
-  /// en que aparecieron. Las preguntas saltadas con "Skip" no cuentan
-  /// como falladas (no se respondieron).
-  List<QuizQuestion> get failedQuestions {
+  /// en que aparecieron, junto con la opción que el usuario eligió.
+  /// Las preguntas saltadas con "Skip" no cuentan como falladas (no se
+  /// respondieron, así que no hay "opción elegida" que mostrar).
+  List<FailedQuestionResult> get failedQuestions {
     return [
       for (var i = 0; i < questions.length; i++)
-        if (answeredCorrectByIndex[i] == false) questions[i],
+        if (answeredCorrectByIndex[i] == false)
+          FailedQuestionResult(
+            question: questions[i],
+            selectedOptionIndex: selectedOptionByIndex[i]!,
+          ),
     ];
   }
 
@@ -114,9 +131,11 @@ class QuizState {
     bool? fiftyFiftyUsed,
     bool? skipUsed,
     Map<int, bool>? answeredCorrectByIndex,
+    Map<int, int>? selectedOptionByIndex,
     DateTime? startedAt,
     DateTime? finishedAt,
     int? previousSessionScore,
+    List<String>? newlyUnlockedBadgeIds,
     String? errorMessage,
     bool clearError = false,
   }) {
@@ -133,10 +152,31 @@ class QuizState {
       fiftyFiftyUsed: fiftyFiftyUsed ?? this.fiftyFiftyUsed,
       skipUsed: skipUsed ?? this.skipUsed,
       answeredCorrectByIndex: answeredCorrectByIndex ?? this.answeredCorrectByIndex,
+      selectedOptionByIndex: selectedOptionByIndex ?? this.selectedOptionByIndex,
       startedAt: startedAt ?? this.startedAt,
       finishedAt: finishedAt ?? this.finishedAt,
       previousSessionScore: previousSessionScore ?? this.previousSessionScore,
+      newlyUnlockedBadgeIds: newlyUnlockedBadgeIds ?? this.newlyUnlockedBadgeIds,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
+}
+
+/// Resultado de una pregunta fallada, listo para pintar en "Revisar
+/// errores": la pregunta completa + qué opción eligió el usuario. La
+/// respuesta correcta y la explicación se leen directamente de
+/// `question` (question.correctIndex / question.explanationFor), que
+/// vienen del JSON local — nunca se inventan.
+@immutable
+class FailedQuestionResult {
+  const FailedQuestionResult({
+    required this.question,
+    required this.selectedOptionIndex,
+  });
+
+  final QuizQuestion question;
+  final int selectedOptionIndex;
+
+  QuizOption get selectedOption => question.options[selectedOptionIndex];
+  QuizOption get correctOption => question.options[question.correctIndex];
 }
