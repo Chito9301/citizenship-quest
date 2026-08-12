@@ -23,6 +23,7 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final progressAsync = ref.watch(userProgressStreamProvider);
     final questionsAsync = ref.watch(quizQuestionsProvider);
+    final masteredAsync = ref.watch(masteredQuestionsCountProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appTitle)),
@@ -37,8 +38,10 @@ class HomeScreen extends ConsumerWidget {
             // cantidad de preguntas que hay hoy en preguntas.json.
             // Ver comentario en officialUscisQuestionBankSize.
             const totalCount = officialUscisQuestionBankSize;
-            final masteredCount =
-                userProgress.totalCorrectAnswers.clamp(0, totalCount);
+            // Sprint 6: "dominada" ahora es un dato real por pregunta
+            // (aciertos consecutivos >= umbral), no una aproximación
+            // sobre el total de respuestas correctas acumuladas.
+            final masteredCount = masteredAsync.valueOrNull ?? 0;
 
             final categories = {for (final q in allQuestions) q.category};
 

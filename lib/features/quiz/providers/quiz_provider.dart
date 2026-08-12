@@ -6,15 +6,31 @@ import 'package:flutter/services.dart' show rootBundle, HapticFeedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/local_storage_service.dart';
+import '../../../core/question_progress_service.dart';
 import '../../../models/quiz_models.dart';
 import '../../../services/sync_service.dart';
 import '../../gamification/providers/gamification_provider.dart';
+import '../logic/spaced_repetition_selector.dart';
 import 'quiz_state.dart';
 
 /// Provider global de acceso al almacenamiento local (usado por
 /// múltiples features).
 final localStorageServiceProvider = Provider<LocalStorageService>((ref) {
   return LocalStorageService.instance;
+});
+
+/// Provider global del progreso por pregunta (Sprint 6: repaso por
+/// errores). Archivo y ciclo de vida independientes de
+/// localStorageServiceProvider.
+final questionProgressServiceProvider = Provider<QuestionProgressService>((ref) {
+  return QuestionProgressService.instance;
+});
+
+/// Cantidad de preguntas "dominadas" (aciertos consecutivos >= umbral),
+/// reactiva: se actualiza sola al terminar cada partida. Reemplaza a la
+/// aproximación anterior basada en `totalCorrectAnswers`.
+final masteredQuestionsCountProvider = StreamProvider<int>((ref) {
+  return ref.watch(questionProgressServiceProvider).watchMasteredCount();
 });
 
 /// Provider global del servicio de sincronización.
@@ -45,19 +61,27 @@ class QuizController extends StateNotifier<QuizState> {
   /// _persistResults() se ejecute como máximo una vez por partida.
   bool _resultsPersisted = false;
 
-  Future<void> startQuiz({int questionCount = 10, bool shuffle = true}) async {
+  Future<void> startQuiz({int questionCount = 10}) async {
     _resultsPersisted = false;
     state = state.copyWith(status: QuizStatus.loading, clearError: true);
     try {
       final allQuestions = await _ref.read(quizQuestionsProvider.future);
-      final pool = [...allQuestions];
-      if (shuffle) pool.shuffle(Random());
+      final progressService = _ref.read(questionProgressServiceProvider);
+      final progress = await progressService.getAllProgress();
+
+      // Sprint 6: en vez de un shuffle simple, prioriza preguntas que
+      // el usuario todavía no domina (ver spaced_repetition_selector.dart).
+      final prioritized = selectPrioritizedSession(
+        allQuestions: allQuestions,
+        progress: progress,
+        sessionSize: questionCount,
+      );
+
       // .shuffled() reordena las 4 opciones de CADA pregunta (en el
       // JSON la correcta siempre está en la posición 0) y recalcula
       // correctIndex. Se hace una sola vez aquí, al armar la partida,
       // así el orden queda fijo mientras el usuario responde.
-      final selected =
-          pool.take(questionCount).map((q) => q.shuffled()).toList();
+      final selected = prioritized.map((q) => q.shuffled()).toList();
 
       state = QuizState(
         status: QuizStatus.inProgress,
@@ -156,6 +180,7 @@ class QuizController extends StateNotifier<QuizState> {
 
     final storageService = _ref.read(localStorageServiceProvider);
     final syncService = _ref.read(syncServiceProvider);
+    final progressService = _ref.read(questionProgressServiceProvider);
 
     final current = await storageService.getOrCreateProgress();
     final playedAt = DateTime.now().toUtc();
@@ -208,6 +233,18 @@ class QuizController extends StateNotifier<QuizState> {
     state = state.copyWith(newlyUnlockedBadgeIds: newlyUnlocked);
 
     await storageService.saveProgress(finalProgress);
+
+    // Sprint 6: registra el acierto/fallo de CADA pregunta respondida
+    // (no las salteadas con Skip) para el sistema de repaso por
+    // errores. Es una escritura aparte, en su propio archivo, así que
+    // una falla acá nunca puede corromper el progreso del Sprint 5.
+    final questionResults = <String, bool>{
+      for (final entry in state.answeredCorrectByIndex.entries)
+        state.questions[entry.key].id: entry.value,
+    };
+    if (questionResults.isNotEmpty) {
+      await progressService.recordSessionResults(questionResults, playedAt);
+    }
 
     await syncService.enqueueQuizCompleted(
       score: state.score,

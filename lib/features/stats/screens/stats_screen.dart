@@ -5,6 +5,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../models/quiz_models.dart';
 import '../../home/widgets/category_progress_card.dart';
 import '../../profile/providers/profile_provider.dart';
+import '../../quiz/providers/quiz_provider.dart';
 import '../widgets/activity_calendar.dart';
 
 class StatsScreen extends ConsumerWidget {
@@ -14,6 +15,7 @@ class StatsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final progressAsync = ref.watch(userProgressStreamProvider);
+    final masteredAsync = ref.watch(masteredQuestionsCountProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.statsTitle)),
@@ -25,9 +27,10 @@ class StatsScreen extends ConsumerWidget {
             final p = progress ?? const UserProgress();
             // Mismo criterio que Home: el denominador es el banco
             // OFICIAL de USCIS (100), no la cantidad de preguntas que
-            // hay hoy en preguntas.json.
+            // hay hoy en preguntas.json. "Dominada" (Sprint 6) es un
+            // dato real por pregunta, no una aproximación.
             const totalCount = officialUscisQuestionBankSize;
-            final masteredCount = p.totalCorrectAnswers.clamp(0, totalCount);
+            final masteredCount = masteredAsync.valueOrNull ?? 0;
             final accuracyPercent = (p.accuracy * 100).round();
             final studyHours = p.totalStudySeconds ~/ 3600;
             final studyMinutes = (p.totalStudySeconds % 3600) ~/ 60;
