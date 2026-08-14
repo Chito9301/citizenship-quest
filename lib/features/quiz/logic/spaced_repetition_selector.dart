@@ -39,6 +39,11 @@ List<QuizQuestion> selectPrioritizedSession({
 }) {
   final rnd = random ?? Random();
 
+  // Cupos mínimos reservados para highPriority/mediumPriority/nuevas,
+  // para que "mandatory" nunca pueda ocupar la sesión completa. Con
+  // sessionSize=10 esto deja como máximo 7 cupos para mandatory.
+  final minProgressSlots = min(3, sessionSize);
+
   final mandatory = <QuizQuestion>[]; // consecutiveCorrect == 0
   final highPriority = <QuizQuestion>[]; // consecutiveCorrect == 1
   final mediumPriority = <QuizQuestion>[]; // consecutiveCorrect == 2
@@ -88,18 +93,27 @@ List<QuizQuestion> selectPrioritizedSession({
     }
   }
 
-  // Sin tope de porcentaje: cada nivel se llena por completo (hasta el
-  // tamaño de la sesión) ANTES de pasar al siguiente. "mandatory" es
-  // literalmente obligatorio salvo que ya no queden cupos.
-  take(mandatory, sessionSize);
+  // Sin tope de porcentaje para el caso típico: si hay pocas preguntas
+  // "obligatorias" (el caso que ya probaste con q025), entran TODAS
+  // igual que antes. Pero se reserva un mínimo de cupos para
+  // recuperación/contenido nuevo (`minProgressSlots`), para que un
+  // backlog grande de fallos acumulados no pueda acaparar el 100% de
+  // TODAS las sesiones futuras e impedir que las preguntas que ya
+  // mejoraron (highPriority/mediumPriority) vuelvan a aparecer y
+  // sumen el acierto que les falta para llegar a "dominada". Esta es
+  // la corrección de Sprint 6.1: sin este techo, esas preguntas podían
+  // quedar bloqueadas indefinidamente detrás del backlog de
+  // "obligatorias", y el pool chico de ya-dominadas terminaba
+  // repitiéndose como único relleno disponible.
+  final mandatorySlots = max(0, sessionSize - minProgressSlots);
+  take(mandatory, mandatorySlots);
   take(highPriority, sessionSize - selected.length);
   take(mediumPriority, sessionSize - selected.length);
-
-  // Con lo que sobre de espacio, entra contenido nuevo...
   take(neverSeen, sessionSize - selected.length);
 
-  // ...y si todavía sobra (banco chico o casi todo dominado), relleno
-  // al azar con preguntas ya dominadas para repaso ocasional.
+  // Relleno final: NUNCA vuelve a tomar de "mandatory" (eso rompería
+  // el tope de mandatorySlots). Si high/medium/nuevas no alcanzaron a
+  // completar la sesión, se recurre a dominadas como último recurso.
   if (selected.length < sessionSize) {
     take(mastered, sessionSize - selected.length);
   }
