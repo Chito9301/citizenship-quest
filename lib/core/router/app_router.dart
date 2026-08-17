@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/localization/app_localizations.dart';
+import '../../features/exam_selection/screens/exam_selection_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/ranking/screens/ranking_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/stats/screens/stats_screen.dart';
+import '../../models/exam_version.dart';
 import '../local_storage_service.dart';
 
 /// Se inicializa con el valor ya cargado en disco por
@@ -20,6 +22,13 @@ import '../local_storage_service.dart';
 /// sin necesidad de agregar una ruta nueva de GoRouter para eso.
 final onboardingCompletedProvider = StateProvider<bool>((ref) {
   return LocalStorageService.instance.hasSeenOnboarding;
+});
+
+/// Igual patrón que `onboardingCompletedProvider`: se inicializa con lo
+/// que ya haya en disco, y la propia pantalla de selección lo actualiza
+/// al elegir el banco 2008 (el único funcional hoy). Sprint 7.8.
+final examVersionSelectedProvider = StateProvider<bool>((ref) {
+  return LocalStorageService.instance.hasSelectedExamVersion;
 });
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -34,8 +43,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Punto de entrada de la app: muestra el Onboarding la primera vez, y
-/// HomeShell (con la navegación inferior) las siguientes.
+/// Punto de entrada de la app: muestra el Onboarding la primera vez,
+/// después la selección de examen (Sprint 7.8) si todavía no se eligió
+/// ninguna, y HomeShell (con la navegación inferior) el resto de las
+/// veces.
 class AppRoot extends ConsumerWidget {
   const AppRoot({super.key});
 
@@ -48,6 +59,17 @@ class AppRoot extends ConsumerWidget {
         onComplete: () {
           ref.read(onboardingCompletedProvider.notifier).state = true;
           unawaited(LocalStorageService.instance.setHasSeenOnboarding(true));
+        },
+      );
+    }
+
+    final examVersionSelected = ref.watch(examVersionSelectedProvider);
+
+    if (!examVersionSelected) {
+      return ExamSelectionScreen(
+        onSelected: (version) {
+          ref.read(examVersionSelectedProvider.notifier).state = true;
+          unawaited(LocalStorageService.instance.setSelectedExamVersion(version));
         },
       );
     }

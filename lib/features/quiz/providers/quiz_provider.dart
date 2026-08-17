@@ -38,9 +38,13 @@ final syncServiceProvider = Provider<SyncService>((ref) {
   return SyncService(storageService: ref.watch(localStorageServiceProvider));
 });
 
-/// Carga y parsea assets/data/preguntas.json una sola vez.
+/// Carga y parsea el banco USCIS 2008 (assets/data/preguntas_2008.json)
+/// una sola vez. Sprint 7.5: el banco 2008 se separó a su propio
+/// archivo (ver pubspec.yaml); este provider hoy solo conoce el 2008 —
+/// todavía no elige entre bancos, eso queda para cuando exista
+/// preguntas_2025.json.
 final quizQuestionsProvider = FutureProvider<List<QuizQuestion>>((ref) async {
-  final raw = await rootBundle.loadString('assets/data/preguntas.json');
+  final raw = await rootBundle.loadString('assets/data/preguntas_2008.json');
   final decoded = jsonDecode(raw) as Map<String, dynamic>;
   final list = (decoded['questions'] as List<dynamic>? ?? [])
       .map((e) => QuizQuestion.fromJson(e as Map<String, dynamic>))

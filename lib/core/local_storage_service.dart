@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path_provider/path_provider.dart';
 
+import '../models/exam_version.dart';
 import '../models/quiz_models.dart';
 
 /// Almacenamiento local basado en un único archivo JSON.
@@ -78,6 +79,35 @@ class LocalStorageService {
     return _synchronized(() async {
       await _ensureInit();
       _data['hasSeenOnboarding'] = value;
+      await _persist();
+    });
+  }
+
+  // -------------------------------------------------------------------
+  // Banco de examen elegido por el usuario (Sprint 7.7)
+  // -------------------------------------------------------------------
+
+  /// Qué banco eligió el usuario (2008 o 2025). Se guarda solo el
+  /// `label` de [ExamVersion] ('2008'/'2025') en el JSON, no el enum
+  /// directo, para no acoplar el archivo de storage a un tipo de otra
+  /// capa — `ExamVersion.fromLabel()` reconstruye el enum al leerlo.
+  ///
+  /// Default: 2008. Es el único banco funcional hoy (preguntas_2025.json
+  /// todavía no existe), así que ningún usuario nuevo ni ninguna
+  /// preferencia sin guardar puede terminar apuntando a un banco vacío.
+  /// Sprint 7.8 — distingue "nunca eligió" de "eligió 2008". Necesario
+  /// porque `selectedExamVersion` ya devuelve 2008 por default cuando
+  /// no hay nada guardado, así que no alcanza para decidir si hay que
+  /// mostrar la pantalla de selección o no.
+  bool get hasSelectedExamVersion => _data['selectedExamVersion'] != null;
+
+  ExamVersion get selectedExamVersion =>
+      ExamVersion.fromLabel(_data['selectedExamVersion'] as String?);
+
+  Future<void> setSelectedExamVersion(ExamVersion version) {
+    return _synchronized(() async {
+      await _ensureInit();
+      _data['selectedExamVersion'] = version.label;
       await _persist();
     });
   }

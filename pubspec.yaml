@@ -42,4 +42,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    # Banco activo hoy: lo sigue cargando quiz_provider.dart tal cual
+    # (sin cambios en este sprint).
     - assets/data/preguntas.json
+    # Sprint 7.4: copia exacta del banco USCIS 2008 (100 preguntas,
+    # mismos ids), separada a propósito para dejar lugar a un futuro
+    # assets/data/preguntas_2025.json sin mezclarlos en un solo
+    # archivo. Todavía no la carga ningún código — preparación previa
+    # a que quiz_provider.dart empiece a elegir entre bancos.
+    - assets/data/preguntas_2008.json

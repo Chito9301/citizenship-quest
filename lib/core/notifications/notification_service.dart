@@ -83,10 +83,16 @@ class NotificationService {
       body,
       _nextInstanceOf(hour, minute),
       details,
+      // Requerido por la versión de flutter_local_notifications que
+      // realmente resuelve este proyecto en build real (confirmado en
+      // dispositivo: sin este parámetro, el build falla). Ver
+      // pubspec.lock si en algún momento hay que revisar por qué la
+      // versión resuelta difiere de lo que el changelog público del
+      // paquete sugeriría para ^18.0.1.
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
-      uiLocalNotificationDateInterpretation:
-    UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 

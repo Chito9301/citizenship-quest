@@ -47,6 +47,15 @@ class QuizQuestion {
   final String explanationEn;
   final String explanationEs;
 
+  /// Sprint 7.1/7.2 — soporte para múltiples versiones de examen. Todos
+  /// campos aditivos con default seguro: una pregunta de
+  /// preguntas.json que no los tenga (el banco 2008 actual) se sigue
+  /// cargando exactamente igual que antes.
+  final String examVersion; // '2008' o '2025'
+  final bool esExencion65; // exención 65/20 (65 años + 20 de residencia)
+  final bool isFundamental;
+  final String? estadoAplica; // null = aplica a todos los estados
+
   const QuizQuestion({
     required this.id,
     required this.category,
@@ -57,6 +66,10 @@ class QuizQuestion {
     required this.correctIndex,
     required this.explanationEn,
     required this.explanationEs,
+    this.examVersion = '2008',
+    this.esExencion65 = false,
+    this.isFundamental = false,
+    this.estadoAplica,
   });
 
   factory QuizQuestion.fromJson(Map<String, dynamic> json) {
@@ -73,6 +86,14 @@ class QuizQuestion {
       correctIndex: json['correct_index'] as int? ?? 0,
       explanationEn: json['explanation_en'] as String? ?? '',
       explanationEs: json['explanation_es'] as String? ?? '',
+      // Los 4 campos siguientes son opcionales en el JSON. Si faltan
+      // (el banco 2008 actual no los tiene), se usan los defaults del
+      // constructor de arriba — así las 100 preguntas actuales siguen
+      // cargando exactamente igual que antes de este cambio.
+      examVersion: json['exam_version'] as String? ?? '2008',
+      esExencion65: json['es_exencion_65'] as bool? ?? false,
+      isFundamental: json['is_fundamental'] as bool? ?? false,
+      estadoAplica: json['estado_aplica'] as String?,
     );
   }
 
@@ -110,6 +131,10 @@ class QuizQuestion {
       correctIndex: newCorrectIndex,
       explanationEn: explanationEn,
       explanationEs: explanationEs,
+      examVersion: examVersion,
+      esExencion65: esExencion65,
+      isFundamental: isFundamental,
+      estadoAplica: estadoAplica,
     );
   }
 }

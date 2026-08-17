@@ -102,6 +102,14 @@ class AppLocalizations {
       'onboardingSkip': 'Skip',
       'onboardingNext': 'Next',
       'onboardingStart': 'Start now',
+      // Exam version selection (Sprint 7.8)
+      'examSelectionTitle': 'Choose your exam',
+      'examSelectionSubtitle': 'You can\'t change this later from here — pick the one you\'re studying for.',
+      'exam2008Title': '🇺🇸 2008 Exam',
+      'exam2008Subtitle': '100 official questions',
+      'exam2025Title': '🇺🇸 2025 Exam',
+      'exam2025Subtitle': '128 official questions',
+      'exam2025ComingSoon': '2025 bank coming soon',
       'onboardingTitle1': 'Get ready for your citizenship interview',
       'onboardingBody1': 'Practice the official 100 USCIS questions — simply, quickly, and fully offline.',
       'onboardingTitle2': 'Keep your consistency',
@@ -195,6 +203,14 @@ class AppLocalizations {
       'onboardingSkip': 'Saltar',
       'onboardingNext': 'Siguiente',
       'onboardingStart': 'Comenzar ahora',
+      // Selección de versión de examen (Sprint 7.8)
+      'examSelectionTitle': 'Elegí tu examen',
+      'examSelectionSubtitle': 'No vas a poder cambiarlo después desde acá — elegí el que estás estudiando.',
+      'exam2008Title': '🇺🇸 Examen 2008',
+      'exam2008Subtitle': '100 preguntas oficiales',
+      'exam2025Title': '🇺🇸 Examen 2025',
+      'exam2025Subtitle': '128 preguntas oficiales',
+      'exam2025ComingSoon': 'Banco 2025 próximamente',
       'onboardingTitle1': 'Prepárate para tu entrevista de ciudadanía',
       'onboardingBody1': 'Practica las 100 preguntas oficiales de USCIS de forma sencilla, rápida y sin conexión a internet.',
       'onboardingTitle2': 'Mantén tu constancia',
@@ -309,6 +325,13 @@ class AppLocalizations {
   String get onboardingSkip => _t('onboardingSkip');
   String get onboardingNext => _t('onboardingNext');
   String get onboardingStart => _t('onboardingStart');
+  String get examSelectionTitle => _t('examSelectionTitle');
+  String get examSelectionSubtitle => _t('examSelectionSubtitle');
+  String get exam2008Title => _t('exam2008Title');
+  String get exam2008Subtitle => _t('exam2008Subtitle');
+  String get exam2025Title => _t('exam2025Title');
+  String get exam2025Subtitle => _t('exam2025Subtitle');
+  String get exam2025ComingSoon => _t('exam2025ComingSoon');
   String get onboardingTitle1 => _t('onboardingTitle1');
   String get onboardingBody1 => _t('onboardingBody1');
   String get onboardingTitle2 => _t('onboardingTitle2');
